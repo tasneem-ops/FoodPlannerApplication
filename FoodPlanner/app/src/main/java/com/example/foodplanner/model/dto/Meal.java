@@ -30,17 +30,16 @@ public class Meal {
 
     }
 
-    public Meal getMeal(ApiMeal meal){
-        Meal mappedMeal = new Meal();
-        mappedMeal.setId(meal.getId());
-        mappedMeal.setName(meal.getName());
-        mappedMeal.setCategory(meal.getCategory());
-        mappedMeal.setImageUrl(meal.getImageUrl());
-        mappedMeal.setTags(meal.getTags());
-        mappedMeal.setVideoUrl(meal.getVideoUrl());
-        mappedMeal.setOriginCountry(meal.getArea());
-        mappedMeal.setIstructions(meal.getInstructions());
-        ArrayList<MealIngridient> ingredients = new ArrayList<>();
+    public Meal(ApiMeal meal){
+        setId(meal.getId());
+        setName(meal.getName());
+        setCategory(meal.getCategory());
+        setImageUrl(meal.getImageUrl());
+        setTags(meal.getTags());
+        setVideoUrl(meal.getVideoUrl());
+        setOriginCountry(meal.getArea());
+        setIstructions(meal.getInstructions());
+        ArrayList<MealIngridient> ingredientsList = new ArrayList<>();
         try {
             Class<?> reflectionClass = getClass();
             for (int i = 1; i <= 20; i++) {
@@ -51,15 +50,13 @@ public class Meal {
                 String ingredient = (String) ingredientField.get(this);
                 String measure = (String) measureField.get(this);
                 if (ingredient != null && !ingredient.isEmpty()) {
-                    ingredients.add(new MealIngridient(ingredient, measure));
+                    ingredientsList.add(new MealIngridient(ingredient, measure));
                 }
             }
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
-
-        mappedMeal.setIngridients(ingridients);
-        return mappedMeal;
+        setIngridients(ingredientsList);
     }
 
     public String getId() {

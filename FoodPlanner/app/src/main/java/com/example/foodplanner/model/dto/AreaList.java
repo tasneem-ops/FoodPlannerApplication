@@ -7,4 +7,12 @@ import java.util.List;
 public class AreaList {
     @SerializedName("meals")
     public List<Area> areas;
+
+    public List<Area> getAreas() {
+        return areas;
+    }
+
+    public void setAreas(List<Area> areas) {
+        this.areas = areas;
+    }
 }
