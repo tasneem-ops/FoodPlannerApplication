@@ -4,11 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-@Entity(tableName = "favorite_meals")
-public class Meal {
+@Entity(tableName = "plan_meals")
+public class PlanMeal {
     @PrimaryKey
     @NonNull
     public String id;
@@ -20,8 +19,9 @@ public class Meal {
     public String tags;
     public String videoUrl;
     public ArrayList<MealIngredient> ingredients;
+    public String dayOfWeek;
 
-    public Meal(String id, String name, String category, String originCountry, String instructions, String imageUrl, String tags, String videoUrl, ArrayList<MealIngredient> ingredients) {
+    public PlanMeal(String id, String name, String category, String originCountry, String instructions, String imageUrl, String tags, String videoUrl, ArrayList<MealIngredient> ingredients, String dayOfWeek) {
         this.id = id;
         this.name = name;
         this.category = category;
@@ -31,35 +31,20 @@ public class Meal {
         this.tags = tags;
         this.videoUrl = videoUrl;
         this.ingredients = ingredients;
+        this.dayOfWeek = dayOfWeek;
     }
 
-    public Meal(ApiMeal meal){
-        setId(meal.getId());
-        setName(meal.getName());
-        setCategory(meal.getCategory());
-        setImageUrl(meal.getImageUrl());
-        setTags(meal.getTags());
-        setVideoUrl(meal.getVideoUrl());
-        setOriginCountry(meal.getArea());
-        setInstructions(meal.getInstructions());
-        ArrayList<MealIngredient> ingredientsList = new ArrayList<>();
-        try {
-            Class<?> reflectionClass = getClass();
-            for (int i = 1; i <= 20; i++) {
-                Field ingredientField = reflectionClass.getDeclaredField("strIngredient" + i);
-                Field measureField = reflectionClass.getDeclaredField("strMeasure" + i);
-                ingredientField.setAccessible(true);
-                measureField.setAccessible(true);
-                String ingredient = (String) ingredientField.get(this);
-                String measure = (String) measureField.get(this);
-                if (ingredient != null && !ingredient.isEmpty()) {
-                    ingredientsList.add(new MealIngredient(ingredient, measure));
-                }
-            }
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        setIngredients(ingredientsList);
+    public PlanMeal(Meal meal , String dayOfWeek){
+        this.id = meal.getId();
+        this.name = meal.getName();
+        this.category = meal.getCategory();
+        this.originCountry = meal.getOriginCountry();
+        this.instructions = meal.getInstructions();
+        this.imageUrl = meal.imageUrl;
+        this.tags = meal.getTags();
+        this.videoUrl = meal.getVideoUrl();
+        this.ingredients = meal.getIngredients();
+        this.dayOfWeek = dayOfWeek;
     }
 
     public String getId() {
@@ -114,7 +99,7 @@ public class Meal {
         return tags;
     }
 
-    public void setTags(String tags) {
+    public void setTags(java.lang.String tags) {
         this.tags = tags;
     }
 
@@ -122,7 +107,7 @@ public class Meal {
         return videoUrl;
     }
 
-    public void setVideoUrl(String videoUrl) {
+    public void setVideoUrl(java.lang.String videoUrl) {
         this.videoUrl = videoUrl;
     }
 

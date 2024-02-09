@@ -1,12 +1,12 @@
 package com.example.foodplanner.model.dto;
 
-public class MealIngridient {
+public class MealIngredient {
     String name;
     String measure;
 
     String imageUrl;
 
-    public MealIngridient(String name, String measure) {
+    public MealIngredient(String name, String measure) {
         this.name = name;
         this.measure = measure;
         this.imageUrl = getImageUrl();
