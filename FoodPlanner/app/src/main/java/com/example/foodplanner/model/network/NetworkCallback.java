@@ -9,28 +9,28 @@ import java.util.List;
 
 public interface NetworkCallback{
     public interface MealDetailNetworkCallback{
-        public void onSuccessResult(Meal meal);
+        public void onMealDetailSuccessResult(Meal meal);
         public void onFailureResult(String errorMessage);
     }
 
     public interface CategoryListNetworkCallback{
-        public void onSuccessResult(List<Category> categoryList);
+        public void onCategoryListSuccessResult(List<Category> categoryList);
         public void onFailureResult(String errorMessage);
     }
     public interface AreaListNetworkCallback{
-        public void onSuccessResult(List<Area> categoryList);
+        public void onAreaListSuccessResult(List<Area> categoryList);
         public void onFailureResult(String errorMessage);
     }
     public interface FilterByCategoryNetworkCallback{
-        public void onSuccessResult(List<ApiFilteredMeal> categoryList);
+        public void onFilterByCategorySuccessResult(List<ApiFilteredMeal> categoryList);
         public void onFailureResult(String errorMessage);
     }
     public interface FilterByAreaNetworkCallback{
-        public void onSuccessResult(List<ApiFilteredMeal> categoryList);
+        public void onFilterByAreaSuccessResult(List<ApiFilteredMeal> categoryList);
         public void onFailureResult(String errorMessage);
     }
     public interface FilterByIngredientNetworkCallback{
-        public void onSuccessResult(List<ApiFilteredMeal> categoryList);
+        public void onFilterByIngredientSuccessResult(List<ApiFilteredMeal> categoryList);
         public void onFailureResult(String errorMessage);
     }
 }

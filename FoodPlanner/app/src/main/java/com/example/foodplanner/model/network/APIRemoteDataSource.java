@@ -40,7 +40,7 @@ public class APIRemoteDataSource implements IApiRemoteDataSource{
         Callback callback = new Callback<ApiMealsList>() {
             @Override
             public void onResponse(Call<ApiMealsList> call, Response<ApiMealsList> response) {
-                networkCallback.onSuccessResult(new Meal(response.body().getMeals().get(0)));
+                networkCallback.onMealDetailSuccessResult(new Meal(response.body().getMeals().get(0)));
             }
 
             @Override
@@ -57,7 +57,7 @@ public class APIRemoteDataSource implements IApiRemoteDataSource{
         Callback callback = new Callback<ApiMealsList>() {
             @Override
             public void onResponse(Call<ApiMealsList> call, Response<ApiMealsList> response) {
-                networkCallback.onSuccessResult(new Meal(response.body().getMeals().get(0)));
+                networkCallback.onMealDetailSuccessResult(new Meal(response.body().getMeals().get(0)));
             }
 
             @Override
@@ -75,7 +75,7 @@ public class APIRemoteDataSource implements IApiRemoteDataSource{
 
             @Override
             public void onResponse(Call<CategoryList> call, Response<CategoryList> response) {
-                networkCallback.onSuccessResult(response.body().getCategories());
+                networkCallback.onCategoryListSuccessResult(response.body().getCategories());
             }
 
             @Override
@@ -93,7 +93,7 @@ public class APIRemoteDataSource implements IApiRemoteDataSource{
 
             @Override
             public void onResponse(Call<AreaList> call, Response<AreaList> response) {
-                networkCallback.onSuccessResult(response.body().getAreas());
+                networkCallback.onAreaListSuccessResult(response.body().getAreas());
             }
 
             @Override
@@ -110,7 +110,7 @@ public class APIRemoteDataSource implements IApiRemoteDataSource{
         Callback callback = new Callback<ApiFilteredMealsList>() {
             @Override
             public void onResponse(Call<ApiFilteredMealsList> call, Response<ApiFilteredMealsList> response) {
-                networkCallback.onSuccessResult(response.body().getMeals());
+                networkCallback.onFilterByCategorySuccessResult(response.body().getMeals());
             }
 
             @Override
@@ -127,7 +127,7 @@ public class APIRemoteDataSource implements IApiRemoteDataSource{
         Callback callback = new Callback<ApiFilteredMealsList>() {
             @Override
             public void onResponse(Call<ApiFilteredMealsList> call, Response<ApiFilteredMealsList> response) {
-                networkCallback.onSuccessResult(response.body().getMeals());
+                networkCallback.onFilterByAreaSuccessResult(response.body().getMeals());
             }
 
             @Override
@@ -144,7 +144,7 @@ public class APIRemoteDataSource implements IApiRemoteDataSource{
         Callback callback = new Callback<ApiFilteredMealsList>() {
             @Override
             public void onResponse(Call<ApiFilteredMealsList> call, Response<ApiFilteredMealsList> response) {
-                networkCallback.onSuccessResult(response.body().getMeals());
+                networkCallback.onFilterByIngredientSuccessResult(response.body().getMeals());
             }
 
             @Override
