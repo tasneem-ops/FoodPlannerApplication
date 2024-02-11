@@ -17,4 +17,8 @@ public class Area {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getThumbnailUrl(){
+        return AreaMealMap.map.get(name);
+    }
 }

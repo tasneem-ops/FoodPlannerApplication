@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">FoodPlanner</string>
+   <string name="profile">Profile</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="favorites">Favorites</string>
+    <string name="week_plan">Week Plan</string>
+    <string name="greeting">Morning, What are you craving today?</string>
+    <string name="meal_of_the_day">Meal Of The Day</string>
+    <string name="favorite">Favorite</string>
+    <string name="content_description_search">Icon to search in meals</string>
+    <string name="content_description_favorite">Icon Add meal to favorites</string>
+    <string name="origin_country">Origin Country</string>
+    <string name="Ingredients">Ingredients</string>
+    <string name="steps">Steps</string>
+    <string name="choose_by_category">Choose By Category</string>
+    <string name="choose_by_area">Choose By Area</string>
+
 </resources>
