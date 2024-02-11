@@ -29,7 +29,7 @@ public class MealIngredient {
     }
 
     public String getImageUrl() {
-        return "https://www.themealdb.com/images/ingredients/"+ name + ".png";
+        return "https://www.themealdb.com/images/ingredients/"+ name + "-Small.png";
     }
 
     public void setImageUrl(String imageUrl) {

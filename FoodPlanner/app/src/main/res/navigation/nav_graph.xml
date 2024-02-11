@@ -16,9 +16,14 @@
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.example.foodplanner.detail_screen.DetailFragment"
+        android:name="com.example.foodplanner.detail_screen.view.DetailFragment"
         android:label="Meal Details"
-        tools:layout="@layout/fragment_detail" />
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="mealID"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.foodplanner.favorites.FavoritesFragment"

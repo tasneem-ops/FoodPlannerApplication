@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,6 +39,7 @@ public class HomeFragment extends Fragment implements IViewHome, OnItemClickList
     RecyclerView categoryRecyclerView, areaRecyclerView;
     CategoryListAdapter categoryListAdapter;
     AreaListAdapter areaListAdapter;
+    CardView cardMealOfTheDay;
     LinearLayoutManager categorylayoutManager, arealayoutManager;
     Context context;
     @Override
@@ -58,11 +60,13 @@ public class HomeFragment extends Fragment implements IViewHome, OnItemClickList
         super.onViewCreated(view, savedInstanceState);
         imageMealOfTheDay = view.findViewById(R.id.imageMealOfTheDay);
         txtTitleMealOfTheDay = view.findViewById(R.id.txtTitleMealOfTheDay);
+        cardMealOfTheDay = view.findViewById(R.id.cardMealOfTheDay);
         initRecyclerView(view);
         presenter = new HomePresenter(this, Repository.getInstance(LocalDataSource.getInstance(getContext()),APIRemoteDataSource.getInstance()));
         presenter.getMealOfTheDay();
         presenter.getCategoryList();
         presenter.getAreaList();
+
     }
 
     private void initRecyclerView(View view) {
@@ -90,6 +94,17 @@ public class HomeFragment extends Fragment implements IViewHome, OnItemClickList
                 .error(R.drawable.broken_image)
                 .into(imageMealOfTheDay);
         txtTitleMealOfTheDay.setText(meal.getName());
+        cardMealOfTheDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToDetailScreen(view, meal.getId());
+            }
+        });
+    }
+
+    private void goToDetailScreen(View view, String id) {
+        HomeFragmentDirections.ActionHomeFragmentToDetailFragment action = HomeFragmentDirections.actionHomeFragmentToDetailFragment(id);
+        Navigation.findNavController(view).navigate(action);
     }
 
     @Override
