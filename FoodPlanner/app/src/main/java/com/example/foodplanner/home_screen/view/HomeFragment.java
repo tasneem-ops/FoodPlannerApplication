@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -28,6 +29,7 @@ import com.example.foodplanner.model.dto.Category;
 import com.example.foodplanner.model.dto.Meal;
 import com.example.foodplanner.model.network.APIRemoteDataSource;
 import com.example.foodplanner.model.repository.Repository;
+import com.example.foodplanner.search_screen.view.Types;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,16 +127,18 @@ public class HomeFragment extends Fragment implements IViewHome, OnItemClickList
 
     @Override
     public void showError(String errMessage) {
-
+        Toast.makeText(context, errMessage, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCategoryClicked(Category category) {
-
+        HomeFragmentDirections.ActionHomeFragmentToSearchFragment action = HomeFragmentDirections.actionHomeFragmentToSearchFragment().setName(category.getCategoryName()).setType(Types.CATEGORY);
+        Navigation.findNavController(imageMealOfTheDay).navigate(action);
     }
 
     @Override
     public void onAreaClicked(Area area) {
-
+        HomeFragmentDirections.ActionHomeFragmentToSearchFragment action = HomeFragmentDirections.actionHomeFragmentToSearchFragment().setName(area.getName()).setType(Types.COUNTRY);
+        Navigation.findNavController(imageMealOfTheDay).navigate(action);
     }
 }

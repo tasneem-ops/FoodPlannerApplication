@@ -2,13 +2,14 @@ package com.example.foodplanner.model.network;
 
 import com.example.foodplanner.model.dto.ApiFilteredMeal;
 import com.example.foodplanner.model.dto.ApiFilteredMealsList;
+import com.example.foodplanner.model.dto.ApiIngridientList;
 import com.example.foodplanner.model.dto.ApiMealsList;
 import com.example.foodplanner.model.dto.Area;
 import com.example.foodplanner.model.dto.AreaList;
 import com.example.foodplanner.model.dto.Category;
 import com.example.foodplanner.model.dto.CategoryList;
 import com.example.foodplanner.model.dto.Meal;
-
+import com.example.foodplanner.model.network.NetworkCallback.*;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,7 +36,7 @@ public class APIRemoteDataSource implements IApiRemoteDataSource{
         return instance;
     }
     @Override
-    public void getRandomMealNetworkCall(NetworkCallback.MealDetailNetworkCallback networkCallback) {
+    public void getRandomMealNetworkCall(MealDetailNetworkCallback networkCallback) {
         Call<ApiMealsList> call = apiService.getRandomMeal();
         Callback callback = new Callback<ApiMealsList>() {
             @Override
@@ -52,7 +53,7 @@ public class APIRemoteDataSource implements IApiRemoteDataSource{
     }
 
     @Override
-    public void getMealByIdNetworkCall(NetworkCallback.MealDetailNetworkCallback networkCallback, String id) {
+    public void getMealByIdNetworkCall(MealDetailNetworkCallback networkCallback, String id) {
         Call<ApiMealsList> call = apiService.getMealById(id);
         Callback callback = new Callback<ApiMealsList>() {
             @Override
@@ -69,7 +70,7 @@ public class APIRemoteDataSource implements IApiRemoteDataSource{
     }
 
     @Override
-    public void getCategoryListNetworkCall(NetworkCallback.CategoryListNetworkCallback networkCallback) {
+    public void getCategoryListNetworkCall(CategoryListNetworkCallback networkCallback) {
         Call<CategoryList> call = apiService.getCategoryList();
         Callback callback = new Callback<CategoryList>(){
 
@@ -87,7 +88,7 @@ public class APIRemoteDataSource implements IApiRemoteDataSource{
     }
 
     @Override
-    public void getAreaListNetworkCall(NetworkCallback.AreaListNetworkCallback networkCallback) {
+    public void getAreaListNetworkCall(AreaListNetworkCallback networkCallback) {
         Call<AreaList> call = apiService.getCountriesList();
         Callback callback = new Callback<AreaList>(){
 
@@ -105,12 +106,30 @@ public class APIRemoteDataSource implements IApiRemoteDataSource{
     }
 
     @Override
-    public void filterMealsByCategoryNetworkCall(NetworkCallback.FilterByCategoryNetworkCallback networkCallback, String category) {
+    public void getIngredientListNetworkCall(IngredientListNetworkCallback networkCallback) {
+        Call<ApiIngridientList> call = apiService.getIngredientList();
+        Callback callback = new Callback<ApiIngridientList>(){
+
+            @Override
+            public void onResponse(Call<ApiIngridientList> call, Response<ApiIngridientList> response) {
+                networkCallback.onIngredientListSuccessResult(response.body().getIngridientList());
+            }
+
+            @Override
+            public void onFailure(Call<ApiIngridientList> call, Throwable t) {
+                networkCallback.onFailureResult(t.getMessage());
+            }
+        };
+        call.enqueue(callback);
+    }
+
+    @Override
+    public void filterMealsByCategoryNetworkCall(FilterNetworkCallback networkCallback, String category) {
         Call<ApiFilteredMealsList> call = apiService.filterMealsByCategory(category);
         Callback callback = new Callback<ApiFilteredMealsList>() {
             @Override
             public void onResponse(Call<ApiFilteredMealsList> call, Response<ApiFilteredMealsList> response) {
-                networkCallback.onFilterByCategorySuccessResult(response.body().getMeals());
+                networkCallback.onFilterSuccessResult(response.body().getMeals());
             }
 
             @Override
@@ -122,12 +141,12 @@ public class APIRemoteDataSource implements IApiRemoteDataSource{
     }
 
     @Override
-    public void filterMealsByCountryNetworkCall(NetworkCallback.FilterByAreaNetworkCallback networkCallback, String country) {
+    public void filterMealsByCountryNetworkCall(FilterNetworkCallback networkCallback, String country) {
         Call<ApiFilteredMealsList> call = apiService.filterMealsByArea(country);
         Callback callback = new Callback<ApiFilteredMealsList>() {
             @Override
             public void onResponse(Call<ApiFilteredMealsList> call, Response<ApiFilteredMealsList> response) {
-                networkCallback.onFilterByAreaSuccessResult(response.body().getMeals());
+                networkCallback.onFilterSuccessResult(response.body().getMeals());
             }
 
             @Override
@@ -139,12 +158,12 @@ public class APIRemoteDataSource implements IApiRemoteDataSource{
     }
 
     @Override
-    public void filterMealsByMainIngredientNetworkCall(NetworkCallback.FilterByIngredientNetworkCallback networkCallback, String mainIngredient) {
+    public void filterMealsByMainIngredientNetworkCall(FilterNetworkCallback networkCallback, String mainIngredient) {
         Call<ApiFilteredMealsList> call = apiService.filterMealsByMainIngredient(mainIngredient);
         Callback callback = new Callback<ApiFilteredMealsList>() {
             @Override
             public void onResponse(Call<ApiFilteredMealsList> call, Response<ApiFilteredMealsList> response) {
-                networkCallback.onFilterByIngredientSuccessResult(response.body().getMeals());
+                networkCallback.onFilterSuccessResult(response.body().getMeals());
             }
 
             @Override

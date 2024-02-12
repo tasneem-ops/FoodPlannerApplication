@@ -1,6 +1,7 @@
 package com.example.foodplanner.model.network;
 
 import com.example.foodplanner.model.dto.ApiFilteredMealsList;
+import com.example.foodplanner.model.dto.ApiIngridientList;
 import com.example.foodplanner.model.dto.ApiMealsList;
 import com.example.foodplanner.model.dto.AreaList;
 import com.example.foodplanner.model.dto.CategoryList;
@@ -20,7 +21,8 @@ public interface APIInterface {
 
     @GET("list.php?a=list")
     Call<AreaList> getCountriesList();
-
+    @GET("list.php?i=list")
+    Call<ApiIngridientList> getIngredientList();
     @GET("filter.php?")
     Call<ApiFilteredMealsList> filterMealsByCategory(@Query("c") String category);
 

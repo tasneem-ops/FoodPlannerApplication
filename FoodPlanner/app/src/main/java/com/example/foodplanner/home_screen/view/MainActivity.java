@@ -1,4 +1,4 @@
-package com.example.foodplanner;
+package com.example.foodplanner.home_screen.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.foodplanner.R;
 import com.example.foodplanner.model.database.LocalDataSource;
 import com.example.foodplanner.model.dto.Meal;
 import com.example.foodplanner.model.dto.PlanMeal;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ActionBar actionBar = getSupportActionBar();
-
+        actionBar.hide();
 //        actionBar.setHomeAsUpIndicator(R.drawable.arrow_back);
 //        actionBar.setDisplayShowHomeEnabled(true);
 //        actionBar.setDisplayHomeAsUpEnabled(true);

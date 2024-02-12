@@ -8,7 +8,7 @@ public class AreaMealMap {
     static {
         map = new HashMap<>();
         map.put("American", "https://www.themealdb.com/images/media/meals/urzj1d1587670726.jpg");
-        map.put("British", "https://www.themealdb.com/images/media/meals/vxuyrx1511302687.jpg");
+        map.put("British", "https://www.themealdb.com/images/media/meals/sqrtwu1511721265.jpg");
         map.put("Canadian", "https://www.themealdb.com/images/media/meals/wpputp1511812960.jpg");
         map.put("Chinese", "https://www.themealdb.com/images/media/meals/1529445893.jpg");
         map.put("Croatian", "https://www.themealdb.com/images/media/meals/tkxquw1628771028.jpg");
