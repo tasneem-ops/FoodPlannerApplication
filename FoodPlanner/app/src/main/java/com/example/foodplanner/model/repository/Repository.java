@@ -7,7 +7,7 @@ import com.example.foodplanner.model.dto.Meal;
 import com.example.foodplanner.model.dto.PlanMeal;
 import com.example.foodplanner.model.network.IApiRemoteDataSource;
 import com.example.foodplanner.model.network.NetworkCallback;
-
+import com.example.foodplanner.model.network.NetworkCallback.*;
 import java.util.List;
 
 public class Repository {
@@ -60,25 +60,28 @@ public class Repository {
         localDataSource.deleteMealFromPlan(meal);
     }
 
-    public void getMealOfTheDay(NetworkCallback.MealDetailNetworkCallback networkCallback){
+    public void getMealOfTheDay(MealDetailNetworkCallback networkCallback){
         remoteDataSource.getRandomMealNetworkCall(networkCallback);
     }
-    public void getMealById(NetworkCallback.MealDetailNetworkCallback networkCallback, String id){
+    public void getMealById(MealDetailNetworkCallback networkCallback, String id){
         remoteDataSource.getMealByIdNetworkCall(networkCallback, id);
     }
-    public void getCategoryList(NetworkCallback.CategoryListNetworkCallback networkCallback){
+    public void getCategoryList(CategoryListNetworkCallback networkCallback){
         remoteDataSource.getCategoryListNetworkCall(networkCallback);
     }
-    public void getAreaList(NetworkCallback.AreaListNetworkCallback networkCallback){
+    public void getAreaList(AreaListNetworkCallback networkCallback){
         remoteDataSource.getAreaListNetworkCall(networkCallback);
     }
-    public void filterMealsByCategory(NetworkCallback.FilterByCategoryNetworkCallback networkCallback, String category){
+    public void getIngredientList(IngredientListNetworkCallback networkCallback){
+        remoteDataSource.getIngredientListNetworkCall(networkCallback);
+    }
+    public void filterMealsByCategory(FilterNetworkCallback networkCallback, String category){
         remoteDataSource.filterMealsByCategoryNetworkCall(networkCallback, category);
     }
-    public void filterMealsByCountry(NetworkCallback.FilterByAreaNetworkCallback networkCallback, String country){
+    public void filterMealsByCountry(FilterNetworkCallback networkCallback, String country){
         remoteDataSource.filterMealsByCountryNetworkCall(networkCallback, country);
     }
-    public void filterMealsByMainIngredient(NetworkCallback.FilterByIngredientNetworkCallback networkCallback, String mainIngredient){
+    public void filterMealsByMainIngredient(FilterNetworkCallback networkCallback, String mainIngredient){
         remoteDataSource.filterMealsByMainIngredientNetworkCall(networkCallback, mainIngredient);
     }
 }

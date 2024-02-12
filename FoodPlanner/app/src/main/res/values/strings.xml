@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">FoodPlanner</string>
+ <string name="profile">Profile</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="favorites">Favorites</string>
+    <string name="week_plan">Week Plan</string>
+    <string name="greeting">Morning, What are you craving today?</string>
+    <string name="meal_of_the_day">Meal Of The Day</string>
+    <string name="favorite">Favorite</string>
+    <string name="content_description_search">Icon to search in meals</string>
+    <string name="content_description_favorite">Icon Add meal to favorites</string>
+    <string name="origin_country">Origin Country</string>
+    <string name="Ingredients">Ingredients</string>
+    <string name="steps">Steps</string>
+    <string name="choose_by_category">Choose By Category</string>
+    <string name="choose_by_area">Choose By Area</string>
+ <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+ <string name="slogan">Plan, Prepare, Eat!</string>
+   <string name="category">Category</string>
+   <string name="ingredient">Ingredient</string>
+    <string name="filter_by">Filter By</string>
+    <string name="view_pager_1_text">Get Inspired</string>
+    <string name="no_item_found">No Item Found</string>
+    <!--    <string name="default_web_client_id">783305378575-kh38rd5nv0qk157bs7fhjladulcuf80l.apps.googleusercontent.com</string>-->
+
 </resources>

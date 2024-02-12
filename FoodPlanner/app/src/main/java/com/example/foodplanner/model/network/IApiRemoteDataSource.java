@@ -6,15 +6,17 @@ import com.example.foodplanner.model.dto.AreaList;
 import com.example.foodplanner.model.dto.Category;
 import com.example.foodplanner.model.dto.CategoryList;
 import com.example.foodplanner.model.dto.Meal;
+import com.example.foodplanner.model.network.NetworkCallback.*;
 
 import java.util.List;
 
 public interface IApiRemoteDataSource {
-    void getRandomMealNetworkCall(NetworkCallback.MealDetailNetworkCallback networkCallback);
-    void getMealByIdNetworkCall(NetworkCallback.MealDetailNetworkCallback networkCallback, String id);
-    void getCategoryListNetworkCall(NetworkCallback.CategoryListNetworkCallback networkCallback);
-    void getAreaListNetworkCall(NetworkCallback.AreaListNetworkCallback networkCallback);
-    void filterMealsByCategoryNetworkCall(NetworkCallback.FilterByCategoryNetworkCallback networkCallback, String category);
-    void filterMealsByCountryNetworkCall(NetworkCallback.FilterByAreaNetworkCallback networkCallback, String country);
-    void filterMealsByMainIngredientNetworkCall(NetworkCallback.FilterByIngredientNetworkCallback networkCallback, String mainIngredient);
+    void getRandomMealNetworkCall(MealDetailNetworkCallback networkCallback);
+    void getMealByIdNetworkCall(MealDetailNetworkCallback networkCallback, String id);
+    void getCategoryListNetworkCall(CategoryListNetworkCallback networkCallback);
+    void getAreaListNetworkCall(AreaListNetworkCallback networkCallback);
+    void getIngredientListNetworkCall(IngredientListNetworkCallback networkCallback);
+    void filterMealsByCategoryNetworkCall(FilterNetworkCallback networkCallback, String category);
+    void filterMealsByCountryNetworkCall(FilterNetworkCallback networkCallback, String country);
+    void filterMealsByMainIngredientNetworkCall(FilterNetworkCallback networkCallback, String mainIngredient);
 }
