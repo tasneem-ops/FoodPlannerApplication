@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.foodplanner.R;
+import com.example.foodplanner.authentication.view.AuthenticationActivity;
 import com.example.foodplanner.home_screen.view.MainActivity;
 
 
@@ -55,7 +56,7 @@ public class SplashFragment extends Fragment {
             @Override
             public void onAnimationEnd(Animation animation) {
                 Navigation.findNavController(view).navigate(R.id.action_splashFragment_to_viewPagerFragment);
-                Intent intent = new Intent(getContext(), MainActivity.class);
+                Intent intent = new Intent(getContext(), AuthenticationActivity.class);
                 startActivity(intent);
                 requireActivity().finish();
             }
