@@ -9,11 +9,12 @@ import org.checkerframework.checker.units.qual.A;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-@Entity(tableName = "favorite_meals")
+@Entity(tableName = "favorite_meals", primaryKeys = {"id", "userID"})
 public class Meal {
-    @PrimaryKey
     @NonNull
     public String id;
+    @NonNull
+    public String userID;
     public String name;
     public String category;
     public String originCountry;
@@ -157,5 +158,13 @@ public class Meal {
 
     public void setIngredients(ArrayList<MealIngredient> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 }

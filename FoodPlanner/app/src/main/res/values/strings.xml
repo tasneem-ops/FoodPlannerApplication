@@ -33,5 +33,12 @@
     <string name="full_name">Full Name</string>
     <string name="default_web_client_id">267926310557-neb96of56v7352coh1mn0b53imju3jr3.apps.googleusercontent.com</string>
     <string name="web_client_secret">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</string>
+    <string name="your_favorites">Your Favorite Meals</string>
+    <string name="sync_data">Sync Data</string>
+    <string name="logout">Log Out</string>
+    <string name="week_plan_title">Your Plan</string>
+    <string name="today_plan_title">Today\'s Plan</string>
+    <string name="tomorrow_plan_title">Tomorrow\'s Plan</string>
+    <string name="pic_date">Pic A Date</string>
 
 </resources>

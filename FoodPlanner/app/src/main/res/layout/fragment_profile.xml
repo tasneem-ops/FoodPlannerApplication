@@ -1,14 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".profile.ProfileFragment">
+    tools:context=".profile.view.ProfileFragment">
 
     <TextView
-        android:layout_gravity="center"
+        android:id="@+id/profileNameTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Profile Fragment"
-        android:textSize="48sp"/>
-</FrameLayout>
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="@+id/profileImagText"
+        app:layout_constraintStart_toStartOf="@+id/profileImagText"
+        app:layout_constraintTop_toBottomOf="@+id/profileImagText"
+        tools:text="Name" />
+
+    <TextView
+        android:id="@+id/profileEmailTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="@+id/profileImagText"
+        app:layout_constraintStart_toStartOf="@+id/profileImagText"
+        app:layout_constraintTop_toBottomOf="@+id/profileNameTxt"
+        tools:text="Email" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <Button
+        android:id="@+id/syncButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/sync_data"
+        app:layout_constraintEnd_toEndOf="@+id/profileImagText"
+        app:layout_constraintStart_toStartOf="@+id/profileImagText"
+        app:layout_constraintTop_toBottomOf="@+id/profileEmailTxt" />
+
+    <TextView
+        android:id="@+id/profileImagText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circular_shape"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toTopOf="@+id/guidelineTop"
+        tools:text="T" />
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/logout"
+        app:layout_constraintEnd_toEndOf="@+id/profileImagText"
+        app:layout_constraintStart_toStartOf="@+id/profileImagText"
+        app:layout_constraintTop_toBottomOf="@+id/syncButton" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="48dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

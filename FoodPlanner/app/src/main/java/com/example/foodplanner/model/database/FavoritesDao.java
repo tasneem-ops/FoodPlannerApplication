@@ -18,11 +18,11 @@ public interface FavoritesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAllMeals(Meal... meals);
 
-    @Query("SELECT * FROM favorite_meals")
-    LiveData<List<Meal>> getAllFavorites();
+    @Query("SELECT * FROM favorite_meals WHERE userID= :userID")
+    LiveData<List<Meal>> getAllFavorites(String userID);
 
-    @Query("SELECT * FROM favorite_meals WHERE id= :id")
-    LiveData<Meal> getMealById(String id);
+    @Query("SELECT * FROM favorite_meals WHERE id= :id AND userID= :userID")
+    LiveData<Meal> getMealById(String id, String userID);
 
     @Delete
     void deleteMeal(Meal meal);

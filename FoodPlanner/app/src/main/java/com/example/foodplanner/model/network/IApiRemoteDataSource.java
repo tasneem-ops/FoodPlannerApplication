@@ -19,4 +19,6 @@ public interface IApiRemoteDataSource {
     void filterMealsByCategoryNetworkCall(FilterNetworkCallback networkCallback, String category);
     void filterMealsByCountryNetworkCall(FilterNetworkCallback networkCallback, String country);
     void filterMealsByMainIngredientNetworkCall(FilterNetworkCallback networkCallback, String mainIngredient);
+    void getDataFromFirebase(String userID);
+    void updateDataOnFirebase(String userID);
 }

@@ -20,14 +20,14 @@ public interface PlanDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAllMeals(PlanMeal... meals);
 
-    @Query("SELECT * FROM plan_meals")
-    LiveData<List<PlanMeal>> getAllPlanMeals();
+    @Query("SELECT * FROM plan_meals WHERE userID= :userID")
+    LiveData<List<PlanMeal>> getAllPlanMeals(String userID);
 
-    @Query("SELECT * FROM plan_meals WHERE id= :id")
-    LiveData<PlanMeal> getMealById(String id);
+    @Query("SELECT * FROM plan_meals WHERE id= :id AND userID= :userID")
+    LiveData<PlanMeal> getMealById(String id, String userID);
 
-    @Query("SELECT * FROM plan_meals WHERE dayOfWeek= :day")
-    LiveData<List<PlanMeal>> getMealByDay(String day);
+    @Query("SELECT * FROM plan_meals WHERE date= :day AND userID= :userID")
+    LiveData<List<PlanMeal>> getMealByDay(String day, String userID);
 
     @Delete
     void deleteMeal(PlanMeal meal);

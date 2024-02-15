@@ -2,15 +2,15 @@ package com.example.foodplanner.model.dto;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
 
-@Entity(tableName = "plan_meals")
+@Entity(tableName = "plan_meals", primaryKeys = {"id", "userID"})
 public class PlanMeal {
-    @PrimaryKey
     @NonNull
     public String id;
+    @NonNull
+    public String userID;
     public String name;
     public String category;
     public String originCountry;
@@ -19,9 +19,9 @@ public class PlanMeal {
     public String tags;
     public String videoUrl;
     public ArrayList<MealIngredient> ingredients;
-    public String dayOfWeek;
+    public String date;
 
-    public PlanMeal(String id, String name, String category, String originCountry, String instructions, String imageUrl, String tags, String videoUrl, ArrayList<MealIngredient> ingredients, String dayOfWeek) {
+    public PlanMeal(String id, String name, String category, String originCountry, String instructions, String imageUrl, String tags, String videoUrl, ArrayList<MealIngredient> ingredients, String date) {
         this.id = id;
         this.name = name;
         this.category = category;
@@ -31,11 +31,12 @@ public class PlanMeal {
         this.tags = tags;
         this.videoUrl = videoUrl;
         this.ingredients = ingredients;
-        this.dayOfWeek = dayOfWeek;
+        this.date = date;
     }
 
     public PlanMeal(Meal meal , String dayOfWeek){
         this.id = meal.getId();
+        this.userID = meal.getUserID();
         this.name = meal.getName();
         this.category = meal.getCategory();
         this.originCountry = meal.getOriginCountry();
@@ -44,7 +45,7 @@ public class PlanMeal {
         this.tags = meal.getTags();
         this.videoUrl = meal.getVideoUrl();
         this.ingredients = meal.getIngredients();
-        this.dayOfWeek = dayOfWeek;
+        this.date = dayOfWeek;
     }
 
     public String getId() {
