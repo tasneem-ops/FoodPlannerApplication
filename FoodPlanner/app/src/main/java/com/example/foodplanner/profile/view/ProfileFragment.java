@@ -22,26 +22,19 @@ import com.example.foodplanner.R;
 import com.example.foodplanner.authentication.presenter.AuthConstants;
 import com.example.foodplanner.authentication.view.AuthenticationActivity;
 import com.example.foodplanner.model.database.LocalDataSource;
-import com.example.foodplanner.model.dto.Meal;
 import com.example.foodplanner.model.network.APIRemoteDataSource;
 import com.example.foodplanner.model.repository.Repository;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.foodplanner.profile.presenter.IProfilePresenter;
+import com.example.foodplanner.profile.presenter.ProfilePresenter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.gson.Gson;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class ProfileFragment extends Fragment {
-    String userID;
+public class ProfileFragment extends Fragment implements IViewProfile{
     FirebaseUser user;
     Button syncButton, logoutButton;
     TextView profileImagText, profileNameText, profileEmailText;
+    Context context;
+    IProfilePresenter presenter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,34 +50,22 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        context = getContext();
+        presenter = new ProfilePresenter(this, Repository.getInstance(LocalDataSource.getInstance(context), APIRemoteDataSource.getInstance()));
         user = FirebaseAuth.getInstance().getCurrentUser();
         initUI(view);
-        userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         syncButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Repository repository = Repository.getInstance(LocalDataSource.getInstance(getContext()), APIRemoteDataSource.getInstance());
-                repository.getAllFavorite(userID).observe(getViewLifecycleOwner(), new Observer<List<Meal>>() {
-                    @Override
-                    public void onChanged(List<Meal> mealList) {
-                        Map<String, String> userData = new HashMap<>();
-                        Gson gson = new Gson();
-                        userData.put("Favorites", gson.toJson(mealList));
-                        updateFirebaseDatabase(userData);
-                    }
-                });
+                presenter.syncData();
             }
         });
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);
-                sharedPreferences.edit().putBoolean(AuthConstants.IS_LOGGED_IN, false);
-                sharedPreferences.edit().putString(AuthConstants.GOOGLE_CREDENTIALS, null);
-                sharedPreferences.edit().putString(AuthConstants.EMAIL, null);
-                sharedPreferences.edit().putString(AuthConstants.PASSWORD, null);
-                sharedPreferences.edit().putString(AuthConstants.AUTH_METHOD, null);
+                updateSharedPref();
                 Intent intent = new Intent(getActivity(), AuthenticationActivity.class);
                 startActivity(intent);
                 getActivity().finish();
@@ -102,23 +83,22 @@ public class ProfileFragment extends Fragment {
         profileNameText.setText(user.getDisplayName());
         profileEmailText.setText(user.getEmail());
     }
-    private void updateFirebaseDatabase(Map<String, String> userData){
+    private void updateSharedPref(){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);
+        sharedPreferences.edit().putBoolean(AuthConstants.IS_LOGGED_IN, false);
+        sharedPreferences.edit().putString(AuthConstants.GOOGLE_CREDENTIALS, null);
+        sharedPreferences.edit().putString(AuthConstants.EMAIL, null);
+        sharedPreferences.edit().putString(AuthConstants.PASSWORD, null);
+        sharedPreferences.edit().putString(AuthConstants.AUTH_METHOD, null);
+    }
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+    @Override
+    public void syncSuccessful() {
+        Toast.makeText(context, "Data Synced Successfully", Toast.LENGTH_SHORT).show();
+    }
 
-        db.collection("users").document(userID)
-            .set(userData)
-            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Toast.makeText(getContext(), "Data Synced Successfully", Toast.LENGTH_SHORT).show();
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(), "Error Updating Data", Toast.LENGTH_SHORT).show();
-                }
-            });
+    @Override
+    public void syncFaliure() {
+        Toast.makeText(context, "Error Updating Data", Toast.LENGTH_SHORT).show();
     }
 }

@@ -2,12 +2,14 @@ package com.example.foodplanner.model.database;
 
 import androidx.room.TypeConverter;
 
+import com.example.foodplanner.model.dto.Meal;
 import com.example.foodplanner.model.dto.MealIngredient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ArrayTypeConverter {
         @TypeConverter

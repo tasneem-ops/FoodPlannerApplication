@@ -1,13 +1,13 @@
 package com.example.foodplanner.favorites.presenter;
 
-import androidx.lifecycle.LiveData;
-
 import com.example.foodplanner.favorites.view.IViewFav;
 import com.example.foodplanner.model.dto.Meal;
 import com.example.foodplanner.model.repository.Repository;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
+
+import io.reactivex.rxjava3.core.Flowable;
 
 public class FavPresenter implements IFavPresenter{
     IViewFav view;
@@ -19,9 +19,10 @@ public class FavPresenter implements IFavPresenter{
     }
 
     @Override
-    public void getFavMeals() {
-        LiveData<List<Meal>> meals =  repository.getAllFavorite(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        view.setFavList(meals);
+    public Flowable<List<Meal>> getFavMeals() {
+        Flowable<List<Meal>> meals =  repository.getAllFavorite(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        return meals;
+//        view.setFavList(meals);
     }
 
     @Override

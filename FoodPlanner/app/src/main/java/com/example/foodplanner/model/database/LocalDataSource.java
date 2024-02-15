@@ -9,6 +9,8 @@ import com.example.foodplanner.model.dto.PlanMeal;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Flowable;
+
 public class LocalDataSource implements ILocalDataSource{
     Context context;
     FavoritesDao favoritesDao;
@@ -49,12 +51,12 @@ public class LocalDataSource implements ILocalDataSource{
     }
 
     @Override
-    public LiveData<List<Meal>> getAllFavorite(String userID) {
+    public Flowable<List<Meal>> getAllFavorite(String userID) {
         return favoritesDao.getAllFavorites(userID);
     }
 
     @Override
-    public LiveData<Meal> getFavMealById(String id, String userID) {
+    public Flowable<Meal> getFavMealById(String id, String userID) {
         return favoritesDao.getMealById(id, userID);
     }
 
@@ -89,17 +91,17 @@ public class LocalDataSource implements ILocalDataSource{
     }
 
     @Override
-    public LiveData<List<PlanMeal>> getAllPlanMeals(String userID) {
+    public Flowable<List<PlanMeal>> getAllPlanMeals(String userID) {
         return planDao.getAllPlanMeals(userID);
     }
 
     @Override
-    public LiveData<PlanMeal> getPlanMealById(String id, String userID) {
+    public Flowable<PlanMeal> getPlanMealById(String id, String userID) {
         return planDao.getMealById(id, userID);
     }
 
     @Override
-    public LiveData<List<PlanMeal>> getPlanMealByDay(String day, String userID) {
+    public Flowable<List<PlanMeal>> getPlanMealByDay(String day, String userID) {
         return planDao.getMealByDay(day, userID);
     }
 

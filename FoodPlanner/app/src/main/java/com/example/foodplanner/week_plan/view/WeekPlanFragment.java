@@ -38,6 +38,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class WeekPlanFragment extends Fragment implements IViewWeekPlan, OnPlanMealClickListener{
     RecyclerView todayRecyclerView, tomorrowRecyclerView, anyDayRecyclerView;
     TextView picDate;
@@ -112,37 +116,31 @@ public class WeekPlanFragment extends Fragment implements IViewWeekPlan, OnPlanM
     }
 
     @Override
-    public void setTodayList(LiveData<List<PlanMeal>> meals) {
-        meals.observe(this, new Observer<List<PlanMeal>>() {
-            @Override
-            public void onChanged(List<PlanMeal> planMeals) {
-                todayAdapter.setList(planMeals);
-                todayAdapter.notifyDataSetChanged();
-            }
-        });
+    public void setTodayList(Flowable<List<PlanMeal>> meals) {
+        meals.observeOn(AndroidSchedulers.mainThread())
+                .subscribe(list -> {
+                    todayAdapter.setList(list);
+                    todayAdapter.notifyDataSetChanged();
+                });
     }
 
     @Override
-    public void setTomorrowList(LiveData<List<PlanMeal>> meals) {
-        meals.observe(this, new Observer<List<PlanMeal>>() {
-            @Override
-            public void onChanged(List<PlanMeal> planMeals) {
-                tomorrowAdapter.setList(planMeals);
-                tomorrowAdapter.notifyDataSetChanged();
-            }
-        });
+    public void setTomorrowList(Flowable<List<PlanMeal>> meals) {
+        meals.observeOn(AndroidSchedulers.mainThread())
+                .subscribe(list -> {
+                    tomorrowAdapter.setList(list);
+                    tomorrowAdapter.notifyDataSetChanged();
+                });
     }
 
     @Override
-    public void setAnyDayList(LiveData<List<PlanMeal>> meals, String date) {
+    public void setAnyDayList(Flowable<List<PlanMeal>> meals, String date) {
         if(date.equals(selectedDate)){
-            meals.observe(this, new Observer<List<PlanMeal>>() {
-                @Override
-                public void onChanged(List<PlanMeal> planMeals) {
-                    anyDayAdapter.setList(planMeals);
-                    anyDayAdapter.notifyDataSetChanged();
-                }
-            });
+            meals.observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(list -> {
+                        anyDayAdapter.setList(list);
+                        anyDayAdapter.notifyDataSetChanged();
+                    });
         }
     }
     private void showDatePicker(){

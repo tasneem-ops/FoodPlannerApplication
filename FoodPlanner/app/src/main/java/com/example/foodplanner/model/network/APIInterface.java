@@ -6,6 +6,8 @@ import com.example.foodplanner.model.dto.ApiMealsList;
 import com.example.foodplanner.model.dto.AreaList;
 import com.example.foodplanner.model.dto.CategoryList;
 
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -13,21 +15,21 @@ import retrofit2.http.Query;
 
 public interface APIInterface {
     @GET("random.php")
-    Call<ApiMealsList> getRandomMeal();
+    Single<ApiMealsList> getRandomMeal();
     @GET("lookup.php?")
-    Call<ApiMealsList> getMealById(@Query("i") String id);
+    Single<ApiMealsList> getMealById(@Query("i") String id);
     @GET("categories.php")
-    Call<CategoryList> getCategoryList();
+    Single<CategoryList> getCategoryList();
 
     @GET("list.php?a=list")
-    Call<AreaList> getCountriesList();
+    Single<AreaList> getCountriesList();
     @GET("list.php?i=list")
-    Call<ApiIngridientList> getIngredientList();
+    Single<ApiIngridientList> getIngredientList();
     @GET("filter.php?")
-    Call<ApiFilteredMealsList> filterMealsByCategory(@Query("c") String category);
+    Single<ApiFilteredMealsList> filterMealsByCategory(@Query("c") String category);
 
     @GET("filter.php?")
-    Call<ApiFilteredMealsList> filterMealsByMainIngredient(@Query("i") String mainIngredient);
+    Single<ApiFilteredMealsList> filterMealsByMainIngredient(@Query("i") String mainIngredient);
     @GET("filter.php?")
-    Call<ApiFilteredMealsList> filterMealsByArea(@Query("a")String area);
+    Single<ApiFilteredMealsList> filterMealsByArea(@Query("a")String area);
 }

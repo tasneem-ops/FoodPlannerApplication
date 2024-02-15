@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 
 public class SearchFragment extends Fragment implements IViewSearch, OnSearchClickListener {
@@ -82,19 +83,24 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
             getMeals(name);
         }
         else{
-            presenter.getCategoryList();
-            presenter.getCountryList();
-            presenter.getIngredientList();
+            presenter.getCategoryList().observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(categoryList1 -> {
+                        setCategoryList(categoryList1);
+                    });
+            presenter.getCountryList().observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(areaList1 -> {
+                        setCountryList(areaList1);
+                    });
+            presenter.getIngredientList().observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(ingredientList1->{
+                        setIngredientList(ingredientList1);
+                    });
         }
 
     }
 
 
     private void initUI(View view) {
-//        container = view.findViewById(R.id.searchResultContainer);
-//        sceneOk = Scene.getSceneForLayout(container, R.layout.scene_search_result_ok, getContext());
-//        sceneEmpty = Scene.getSceneForLayout(container, R.layout.scene_search_result_empty, getContext());
-//        TransitionManager.go(sceneOk);
         searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
         textInputEditText = view.findViewById(R.id.inputEditText);
         textInputLayout = view.findViewById(R.id.search_bar);
@@ -140,7 +146,6 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
         });
     }
     private void initRecyclerView() {
-
         layoutManager = new GridLayoutManager(getContext(), 2);
         searchRecyclerView.setHasFixedSize(true);
         searchRecyclerView.setLayoutManager(layoutManager);
@@ -149,18 +154,12 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
     }
     private void updateList(List<SearchItem> list){
         if(list !=null && ! (list.equals(Collections.emptyList()))){
-//            if(! isSceneOk){
-//                TransitionManager.go(sceneOk);
-//                initRecyclerView();
-//                isSceneOk = true;
-//            }
             searchResultGridAdapter.setList(list);
             searchResultGridAdapter.notifyDataSetChanged();
             Observable<SearchItem> studentsObservable = Observable.fromIterable(list);
             textInputEditText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     List<SearchItem> filteredItems = new ArrayList<>();
@@ -169,31 +168,22 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
                                     error ->{},
                                     ()->{updateRecyclerView(filteredItems);});
                 }
-
                 @Override
                 public void afterTextChanged(Editable editable) {}
             });
         }
         else{
-//            TransitionManager.go(sceneEmpty, new Fade());
-//            isSceneOk = false;
-//            Toast.makeText(getContext(), "No Items Found", Toast.LENGTH_SHORT).show();
+
         }
     }
     private void updateRecyclerView(List<SearchItem> filteredItems){
         if(filteredItems !=null && ! (filteredItems.equals(Collections.emptyList()))){
-//            if(! isSceneOk){
-//                TransitionManager.go(sceneOk);
-//                initRecyclerView();
-//                isSceneOk = true;
-//            }
             searchResultGridAdapter.setList(filteredItems);
             searchResultGridAdapter.notifyDataSetChanged();
         }
         else{
-//            TransitionManager.go(sceneEmpty, new Fade());
-//            isSceneOk = false;
-//            Toast.makeText(getContext(), "No Items Found", Toast.LENGTH_SHORT).show();
+            searchResultGridAdapter.setList(new ArrayList<>());
+            searchResultGridAdapter.notifyDataSetChanged();
         }
 
     }
@@ -236,7 +226,10 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
         }
     }
     private void getMeals(String name){
-        presenter.getMealsList(name, type);
+        presenter.getMealsList(name, type).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(meals ->{
+                    setMealList(meals);
+                }, error -> showError(error.getMessage()));
         Toast.makeText(getContext(), "Searching By: "+ name , Toast.LENGTH_SHORT).show();
         textInputEditText.setHint("Search By Meal Name");
         chipGroup.setVisibility(View.GONE);

@@ -12,6 +12,8 @@ import com.example.foodplanner.model.dto.PlanMeal;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Flowable;
+
 @Dao
 public interface PlanDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -21,13 +23,13 @@ public interface PlanDao {
     void insertAllMeals(PlanMeal... meals);
 
     @Query("SELECT * FROM plan_meals WHERE userID= :userID")
-    LiveData<List<PlanMeal>> getAllPlanMeals(String userID);
+    Flowable<List<PlanMeal>> getAllPlanMeals(String userID);
 
     @Query("SELECT * FROM plan_meals WHERE id= :id AND userID= :userID")
-    LiveData<PlanMeal> getMealById(String id, String userID);
+    Flowable<PlanMeal> getMealById(String id, String userID);
 
     @Query("SELECT * FROM plan_meals WHERE date= :day AND userID= :userID")
-    LiveData<List<PlanMeal>> getMealByDay(String day, String userID);
+    Flowable<List<PlanMeal>> getMealByDay(String day, String userID);
 
     @Delete
     void deleteMeal(PlanMeal meal);

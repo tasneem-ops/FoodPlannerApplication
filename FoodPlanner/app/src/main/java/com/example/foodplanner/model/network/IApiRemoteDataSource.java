@@ -1,24 +1,22 @@
 package com.example.foodplanner.model.network;
 
-import com.example.foodplanner.model.dto.ApiFilteredMeal;
-import com.example.foodplanner.model.dto.Area;
+import com.example.foodplanner.model.dto.ApiFilteredMealsList;
+import com.example.foodplanner.model.dto.ApiIngridientList;
+import com.example.foodplanner.model.dto.ApiMealsList;
 import com.example.foodplanner.model.dto.AreaList;
-import com.example.foodplanner.model.dto.Category;
 import com.example.foodplanner.model.dto.CategoryList;
-import com.example.foodplanner.model.dto.Meal;
-import com.example.foodplanner.model.network.NetworkCallback.*;
 
-import java.util.List;
+import io.reactivex.rxjava3.core.Single;
 
 public interface IApiRemoteDataSource {
-    void getRandomMealNetworkCall(MealDetailNetworkCallback networkCallback);
-    void getMealByIdNetworkCall(MealDetailNetworkCallback networkCallback, String id);
-    void getCategoryListNetworkCall(CategoryListNetworkCallback networkCallback);
-    void getAreaListNetworkCall(AreaListNetworkCallback networkCallback);
-    void getIngredientListNetworkCall(IngredientListNetworkCallback networkCallback);
-    void filterMealsByCategoryNetworkCall(FilterNetworkCallback networkCallback, String category);
-    void filterMealsByCountryNetworkCall(FilterNetworkCallback networkCallback, String country);
-    void filterMealsByMainIngredientNetworkCall(FilterNetworkCallback networkCallback, String mainIngredient);
+    Single<ApiMealsList> getRandomMealNetworkCall();
+    Single<ApiMealsList> getMealByIdNetworkCall(String id);
+    Single<CategoryList> getCategoryListNetworkCall();
+    Single<AreaList> getAreaListNetworkCall();
+    Single<ApiIngridientList> getIngredientListNetworkCall();
+    Single<ApiFilteredMealsList> filterMealsByCategoryNetworkCall(String category);
+    Single<ApiFilteredMealsList> filterMealsByCountryNetworkCall(String country);
+    Single<ApiFilteredMealsList> filterMealsByMainIngredientNetworkCall(String mainIngredient);
     void getDataFromFirebase(String userID);
     void updateDataOnFirebase(String userID);
 }
