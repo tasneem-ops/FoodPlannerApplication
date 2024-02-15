@@ -3,10 +3,12 @@ package com.example.foodplanner.detail_screen.presenter;
 import com.example.foodplanner.detail_screen.view.IViewDetail;
 import com.example.foodplanner.model.dto.Meal;
 import com.example.foodplanner.model.dto.PlanMeal;
-import com.example.foodplanner.model.network.NetworkCallback;
 import com.example.foodplanner.model.repository.Repository;
 
-public class DetailPresenter implements IDetailPresenter, NetworkCallback.MealDetailNetworkCallback {
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Single;
+
+public class DetailPresenter implements IDetailPresenter{
     Repository repository;
     IViewDetail view;
 
@@ -15,8 +17,8 @@ public class DetailPresenter implements IDetailPresenter, NetworkCallback.MealDe
         this.view = view;
     }
     @Override
-    public void getMealDetails(String id){
-        repository.getMealById(this, id);
+    public @NonNull Single<Meal> getMealDetails(String id){
+        return repository.getMealById(id).map(apiMealsList -> new Meal(apiMealsList.getMeals().get(0)));
     }
 
     @Override
@@ -27,15 +29,5 @@ public class DetailPresenter implements IDetailPresenter, NetworkCallback.MealDe
     @Override
     public void addMealToPlan(Meal meal, String day){
         repository.insertMealToPlan(new PlanMeal(meal, day));
-    }
-
-    @Override
-    public void onMealDetailSuccessResult(Meal meal) {
-        view.setMeal(meal);
-    }
-
-    @Override
-    public void onFailureResult(String errorMessage) {
-        view.showError(errorMessage);
     }
 }

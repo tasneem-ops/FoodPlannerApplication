@@ -29,6 +29,8 @@ import com.example.foodplanner.model.repository.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+
 public class FavoritesFragment extends Fragment implements IViewFav,OnFavClickListener{
     RecyclerView favoritesRecyclerView;
     LinearLayoutManager layoutManager;
@@ -58,7 +60,11 @@ public class FavoritesFragment extends Fragment implements IViewFav,OnFavClickLi
         favoritesRecyclerView.setLayoutManager(layoutManager);
         favListAdapter = new FavListAdapter(context, new ArrayList<>(), this);
         favoritesRecyclerView.setAdapter(favListAdapter);
-        presenter.getFavMeals();
+        presenter.getFavMeals().observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mealList -> {
+                    favListAdapter.setList(mealList);
+                    favListAdapter.notifyDataSetChanged();
+                });
     }
 
     @Override

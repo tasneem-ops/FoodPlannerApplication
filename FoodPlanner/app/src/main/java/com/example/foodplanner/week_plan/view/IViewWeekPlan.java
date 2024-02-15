@@ -6,8 +6,10 @@ import com.example.foodplanner.model.dto.PlanMeal;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Flowable;
+
 public interface IViewWeekPlan {
-    void setTodayList(LiveData<List<PlanMeal>> meals);
-    void setTomorrowList(LiveData<List<PlanMeal>> meals);
-    void setAnyDayList(LiveData<List<PlanMeal>> meals, String date);
+    void setTodayList(Flowable<List<PlanMeal>> meals);
+    void setTomorrowList(Flowable<List<PlanMeal>> meals);
+    void setAnyDayList(Flowable<List<PlanMeal>> meals, String date);
 }

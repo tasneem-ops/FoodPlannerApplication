@@ -21,7 +21,14 @@ import android.widget.Toast;
 
 import com.example.foodplanner.R;
 import com.example.foodplanner.authentication.presenter.AuthConstants;
+import com.example.foodplanner.authentication.presenter.AuthPresenter;
+import com.example.foodplanner.authentication.presenter.IAuthPresenter;
 import com.example.foodplanner.home_screen.view.MainActivity;
+import com.example.foodplanner.model.database.LocalDataSource;
+import com.example.foodplanner.model.dto.Meal;
+import com.example.foodplanner.model.dto.PlanMeal;
+import com.example.foodplanner.model.network.APIRemoteDataSource;
+import com.example.foodplanner.model.repository.Repository;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -35,9 +42,16 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.checkerframework.checker.units.qual.A;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 public class LoginFragment extends Fragment{
     TextView newUser;
@@ -49,6 +63,8 @@ public class LoginFragment extends Fragment{
     GoogleSignInClient client;
     FirebaseAuth mAuth;
     SharedPreferences authSharedPreferences;
+    IAuthPresenter presenter;
+    Context context;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +85,8 @@ public class LoginFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        context = getContext();
+        presenter = new AuthPresenter(Repository.getInstance(LocalDataSource.getInstance(context), APIRemoteDataSource.getInstance()));
         if(mAuth.getCurrentUser() != null){
             onLoginSuccess();
         }
@@ -134,7 +152,7 @@ public class LoginFragment extends Fragment{
     private void loginUser(String email, String password) {
         if(validateInput(email, password)){
             mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
@@ -166,22 +184,20 @@ public class LoginFragment extends Fragment{
     }
 
     public void onLoginSuccess() {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
+        presenter.loadDataFromFirebase();
+        Intent intent = new Intent(context, MainActivity.class);
         startActivity(intent);
         getActivity().finish();
     }
 
-
     public void onInputNotValid() {
         Toast.makeText(getContext(), "Input Not Valid", Toast.LENGTH_SHORT).show();
     }
-
-
     public void onLoginFailed() {
         Toast.makeText(getContext(), "Login Failed", Toast.LENGTH_SHORT).show();
     }
     private void saveGoogleCredentials(AuthCredential credential){
-        authSharedPreferences = getActivity().getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);
+        authSharedPreferences = context.getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String credentialString = gson.toJson(credential);
         authSharedPreferences.edit().putString(AuthConstants.GOOGLE_CREDENTIALS, credentialString);
@@ -189,14 +205,14 @@ public class LoginFragment extends Fragment{
         authSharedPreferences.edit().putString(AuthConstants.AUTH_METHOD, AuthConstants.AUTH_GOOGLE);
     }
     private void saveEmailCredentials(String email, String password){
-        authSharedPreferences = getActivity().getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);
+        authSharedPreferences = context.getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);
         authSharedPreferences.edit().putString(AuthConstants.EMAIL, email);
         authSharedPreferences.edit().putString(AuthConstants.PASSWORD, password);
         authSharedPreferences.edit().putBoolean(AuthConstants.IS_LOGGED_IN, true);
         authSharedPreferences.edit().putString(AuthConstants.AUTH_METHOD, AuthConstants.EMAIL);
     }
     private void autoLogin(){
-        authSharedPreferences = getActivity().getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);
+        authSharedPreferences = context.getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);
         boolean isLoggedIn = authSharedPreferences.getBoolean(AuthConstants.IS_LOGGED_IN, false);
         if(isLoggedIn){
             String method = authSharedPreferences.getString(AuthConstants.AUTH_METHOD, "");

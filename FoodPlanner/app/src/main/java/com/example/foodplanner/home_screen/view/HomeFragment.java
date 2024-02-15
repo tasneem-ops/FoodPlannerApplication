@@ -34,6 +34,9 @@ import com.example.foodplanner.search_screen.view.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class HomeFragment extends Fragment implements IViewHome, OnItemClickListener{
     ImageView imageMealOfTheDay;
     TextView txtTitleMealOfTheDay;
@@ -66,9 +69,18 @@ public class HomeFragment extends Fragment implements IViewHome, OnItemClickList
         cardMealOfTheDay = view.findViewById(R.id.cardMealOfTheDay);
         initRecyclerView(view);
         presenter = new HomePresenter(this, Repository.getInstance(LocalDataSource.getInstance(getContext()),APIRemoteDataSource.getInstance()));
-        presenter.getMealOfTheDay();
-        presenter.getCategoryList();
-        presenter.getAreaList();
+        presenter.getMealOfTheDay().observeOn(AndroidSchedulers.mainThread())
+                .subscribe(meal ->{
+                    setMealOfTheDay(meal);
+                }, error->{showError(error.getMessage());});
+        presenter.getCategoryList().observeOn(AndroidSchedulers.mainThread())
+                .subscribe(categoryList -> {
+                    setCategoryList(categoryList);
+                }, error ->{showError(error.getMessage());});
+        presenter.getAreaList().observeOn(AndroidSchedulers.mainThread())
+                .subscribe(areaList -> {
+                    setAreaList(areaList);
+                }, error->{showError(error.getMessage());});
 
     }
 

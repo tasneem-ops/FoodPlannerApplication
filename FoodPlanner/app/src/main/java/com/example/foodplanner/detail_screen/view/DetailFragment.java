@@ -1,5 +1,6 @@
 package com.example.foodplanner.detail_screen.view;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -43,6 +44,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+
 
 public class DetailFragment extends Fragment implements IViewDetail{
     TextView mealNameTxt, originCountryTxt, stepsTxt;
@@ -54,6 +57,7 @@ public class DetailFragment extends Fragment implements IViewDetail{
     IngredientGridAdapter ingridientGridAdapter;
     CardView addToFav, addToPlan;
     Meal currentMeal;
+    Context context;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,14 +72,20 @@ public class DetailFragment extends Fragment implements IViewDetail{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        context = getContext();
         initUI(view);
         initRecyclerView();
         presenter = new DetailPresenter(this, Repository.getInstance(LocalDataSource.getInstance(getContext()), APIRemoteDataSource.getInstance()));
         String id = DetailFragmentArgs.fromBundle(getArguments()).getMealID();
-        presenter.getMealDetails(id);
+        presenter.getMealDetails(id).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(meal -> {
+                    setMeal(meal);
+                }, error ->{showError(error.getMessage());});
         addToFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(currentMeal == null)
+                    return;
                 currentMeal.setUserID(FirebaseAuth.getInstance().getCurrentUser().getUid());
                 presenter.addMealToFav(currentMeal);
                 iconFav.setImageResource(R.drawable.favorite_fill);
@@ -84,6 +94,8 @@ public class DetailFragment extends Fragment implements IViewDetail{
         addToPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(currentMeal == null)
+                    return;
                 currentMeal.setUserID(FirebaseAuth.getInstance().getCurrentUser().getUid());
                 MaterialDatePicker datePicker = MaterialDatePicker.Builder.datePicker()
                         .setTitleText("Select date")
@@ -105,13 +117,13 @@ public class DetailFragment extends Fragment implements IViewDetail{
                 datePicker.addOnNegativeButtonClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Snackbar.make(iconSchedule, "Please select a date to save meal to plan", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(view, "Please select a date to save meal to plan", Snackbar.LENGTH_SHORT).show();
                     }
                 });
                 datePicker.addOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialogInterface) {
-                        Snackbar.make(iconSchedule, "Please select a date to save meal to plan", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(view, "Please select a date to save meal to plan", Snackbar.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -144,7 +156,7 @@ public class DetailFragment extends Fragment implements IViewDetail{
     public void setMeal(Meal meal) {
         currentMeal = meal;
         mealNameTxt.setText(meal.getName());
-        Glide.with(this).load(meal.getImageUrl())
+        Glide.with(context).load(meal.getImageUrl())
                 .apply(new RequestOptions().override(700,700))
                 .placeholder(R.drawable.downloading)
                 .error(R.drawable.image_error)
@@ -165,6 +177,6 @@ public class DetailFragment extends Fragment implements IViewDetail{
 
     @Override
     public void showError(String errMessage) {
-        Toast.makeText(getContext(), errMessage , Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, errMessage , Toast.LENGTH_SHORT).show();
     }
 }

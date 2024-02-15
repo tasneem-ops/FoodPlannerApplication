@@ -3,12 +3,19 @@ package com.example.foodplanner.model.repository;
 import androidx.lifecycle.LiveData;
 
 import com.example.foodplanner.model.database.ILocalDataSource;
+import com.example.foodplanner.model.dto.ApiFilteredMealsList;
+import com.example.foodplanner.model.dto.ApiIngridientList;
+import com.example.foodplanner.model.dto.ApiMealsList;
+import com.example.foodplanner.model.dto.AreaList;
+import com.example.foodplanner.model.dto.CategoryList;
 import com.example.foodplanner.model.dto.Meal;
 import com.example.foodplanner.model.dto.PlanMeal;
 import com.example.foodplanner.model.network.IApiRemoteDataSource;
-import com.example.foodplanner.model.network.NetworkCallback;
-import com.example.foodplanner.model.network.NetworkCallback.*;
 import java.util.List;
+
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class Repository {
     ILocalDataSource localDataSource;
@@ -31,11 +38,11 @@ public class Repository {
     public void insertAllMealsToFav(Meal... meals){
         localDataSource.insertAllMealsToFav(meals);
     }
-    public LiveData<List<Meal>> getAllFavorite(String userID){
-        return localDataSource.getAllFavorite(userID);
+    public Flowable<List<Meal>> getAllFavorite(String userID){
+        return localDataSource.getAllFavorite(userID).subscribeOn(Schedulers.io());
     }
-    public LiveData<Meal> getFavMealById(String id, String userID){
-        return localDataSource.getFavMealById(id, userID);
+    public Flowable<Meal> getFavMealById(String id, String userID){
+        return localDataSource.getFavMealById(id, userID).subscribeOn(Schedulers.io());
     }
     public void deleteMealFromFav(Meal meal){
         localDataSource.deleteMealFromFav(meal);
@@ -47,41 +54,41 @@ public class Repository {
     public void insertAllMealsToPlan(PlanMeal... meals){
         localDataSource.insertAllMealsToPlan(meals);
     }
-    public LiveData<List<PlanMeal>> getAllPlanMeals(String userID){
-        return localDataSource.getAllPlanMeals(userID);
+    public Flowable<List<PlanMeal>> getAllPlanMeals(String userID){
+        return localDataSource.getAllPlanMeals(userID).subscribeOn(Schedulers.io());
     }
-    public LiveData<PlanMeal> getPlanMealById(String id, String userID){
-        return localDataSource.getPlanMealById(id, userID);
+    public Flowable<PlanMeal> getPlanMealById(String id, String userID){
+        return localDataSource.getPlanMealById(id, userID).subscribeOn(Schedulers.io());
     }
-    public LiveData<List<PlanMeal>> getPlanMealByDay(String day, String userID){
-        return localDataSource.getPlanMealByDay(day, userID);
+    public Flowable<List<PlanMeal>> getPlanMealByDay(String day, String userID){
+        return localDataSource.getPlanMealByDay(day, userID).subscribeOn(Schedulers.io());
     }
     public void deleteMealFromPlan(PlanMeal meal){
         localDataSource.deleteMealFromPlan(meal);
     }
 
-    public void getMealOfTheDay(MealDetailNetworkCallback networkCallback){
-        remoteDataSource.getRandomMealNetworkCall(networkCallback);
+    public Single<ApiMealsList> getMealOfTheDay(){
+        return remoteDataSource.getRandomMealNetworkCall().subscribeOn(Schedulers.io());
     }
-    public void getMealById(MealDetailNetworkCallback networkCallback, String id){
-        remoteDataSource.getMealByIdNetworkCall(networkCallback, id);
+    public Single<ApiMealsList> getMealById(String id){
+        return remoteDataSource.getMealByIdNetworkCall(id).subscribeOn(Schedulers.io());
     }
-    public void getCategoryList(CategoryListNetworkCallback networkCallback){
-        remoteDataSource.getCategoryListNetworkCall(networkCallback);
+    public Single<CategoryList> getCategoryList(){
+        return remoteDataSource.getCategoryListNetworkCall().subscribeOn(Schedulers.io());
     }
-    public void getAreaList(AreaListNetworkCallback networkCallback){
-        remoteDataSource.getAreaListNetworkCall(networkCallback);
+    public Single<AreaList> getAreaList(){
+        return remoteDataSource.getAreaListNetworkCall().subscribeOn(Schedulers.io());
     }
-    public void getIngredientList(IngredientListNetworkCallback networkCallback){
-        remoteDataSource.getIngredientListNetworkCall(networkCallback);
+    public Single<ApiIngridientList> getIngredientList(){
+        return remoteDataSource.getIngredientListNetworkCall().subscribeOn(Schedulers.io());
     }
-    public void filterMealsByCategory(FilterNetworkCallback networkCallback, String category){
-        remoteDataSource.filterMealsByCategoryNetworkCall(networkCallback, category);
+    public Single<ApiFilteredMealsList> filterMealsByCategory(String category){
+        return remoteDataSource.filterMealsByCategoryNetworkCall(category).subscribeOn(Schedulers.io());
     }
-    public void filterMealsByCountry(FilterNetworkCallback networkCallback, String country){
-        remoteDataSource.filterMealsByCountryNetworkCall(networkCallback, country);
+    public Single<ApiFilteredMealsList> filterMealsByCountry(String country){
+        return remoteDataSource.filterMealsByCountryNetworkCall(country).subscribeOn(Schedulers.io());
     }
-    public void filterMealsByMainIngredient(FilterNetworkCallback networkCallback, String mainIngredient){
-        remoteDataSource.filterMealsByMainIngredientNetworkCall(networkCallback, mainIngredient);
+    public Single<ApiFilteredMealsList> filterMealsByMainIngredient(String mainIngredient){
+        return remoteDataSource.filterMealsByMainIngredientNetworkCall(mainIngredient).subscribeOn(Schedulers.io());
     }
 }

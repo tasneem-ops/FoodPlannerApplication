@@ -15,13 +15,16 @@
     <string name="steps">Steps</string>
     <string name="choose_by_category">Choose By Category</string>
     <string name="choose_by_area">Choose By Area</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="slogan">Plan, Prepare, Eat!</string>
     <string name="category">Category</string>
     <string name="ingredient">Ingredient</string>
     <string name="filter_by">Filter By</string>
-    <string name="view_pager_1_text">Get Inspired</string>
+    <string name="view_pager_1_title">Get Inspired</string>
+    <string name="view_pager_2_title">Save You Plan</string>
+    <string name="view_pager_3_title">Everything is Ready</string>
+    <string name="view_pager_1_text">You can view daily inspiration to pick from</string>
+    <string name="view_pager_2_text">You can search in meals and view recipes and make a plan for your week\'s meals!</string>
+    <string name="view_pager_3_text">Prepare Food and Enjoy!</string>
     <string name="no_item_found">No Item Found</string>
     <string name="login">Login</string>
     <string name="signup">Sign Up</string>
@@ -40,5 +43,8 @@
     <string name="today_plan_title">Today\'s Plan</string>
     <string name="tomorrow_plan_title">Tomorrow\'s Plan</string>
     <string name="pic_date">Pic A Date</string>
+    <string name="next">Next</string>
+    <string name="skip">Skip</string>
+    <string name="start_journey">Let\'s Start</string>
 
 </resources>
