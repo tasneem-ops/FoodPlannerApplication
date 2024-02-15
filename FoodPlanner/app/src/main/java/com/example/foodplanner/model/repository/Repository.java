@@ -31,11 +31,11 @@ public class Repository {
     public void insertAllMealsToFav(Meal... meals){
         localDataSource.insertAllMealsToFav(meals);
     }
-    public LiveData<List<Meal>> getAllFavorite(){
-        return localDataSource.getAllFavorite();
+    public LiveData<List<Meal>> getAllFavorite(String userID){
+        return localDataSource.getAllFavorite(userID);
     }
-    public LiveData<Meal> getFavMealById(String id){
-        return localDataSource.getFavMealById(id);
+    public LiveData<Meal> getFavMealById(String id, String userID){
+        return localDataSource.getFavMealById(id, userID);
     }
     public void deleteMealFromFav(Meal meal){
         localDataSource.deleteMealFromFav(meal);
@@ -47,14 +47,14 @@ public class Repository {
     public void insertAllMealsToPlan(PlanMeal... meals){
         localDataSource.insertAllMealsToPlan(meals);
     }
-    public LiveData<List<PlanMeal>> getAllPlanMeals(){
-        return localDataSource.getAllPlanMeals();
+    public LiveData<List<PlanMeal>> getAllPlanMeals(String userID){
+        return localDataSource.getAllPlanMeals(userID);
     }
-    public LiveData<PlanMeal> getPlanMealById(String id){
-        return localDataSource.getPlanMealById(id);
+    public LiveData<PlanMeal> getPlanMealById(String id, String userID){
+        return localDataSource.getPlanMealById(id, userID);
     }
-    public LiveData<List<PlanMeal>> getPlanMealByDay(String day){
-        return localDataSource.getPlanMealByDay(day);
+    public LiveData<List<PlanMeal>> getPlanMealByDay(String day, String userID){
+        return localDataSource.getPlanMealByDay(day, userID);
     }
     public void deleteMealFromPlan(PlanMeal meal){
         localDataSource.deleteMealFromPlan(meal);

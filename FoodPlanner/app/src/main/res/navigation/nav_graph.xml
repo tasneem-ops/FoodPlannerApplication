@@ -29,7 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.example.foodplanner.favorites.FavoritesFragment"
+        android:name="com.example.foodplanner.favorites.view.FavoritesFragment"
         android:label="@string/favorites"
         tools:layout="@layout/fragment_favorites">
         <action
@@ -56,12 +56,12 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.foodplanner.profile.ProfileFragment"
+        android:name="com.example.foodplanner.profile.view.ProfileFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/weekPlanFragment"
-        android:name="com.example.foodplanner.week_plan.WeekPlanFragment"
+        android:name="com.example.foodplanner.week_plan.view.WeekPlanFragment"
         android:label="@string/week_plan"
         tools:layout="@layout/fragment_week_plan">
         <action

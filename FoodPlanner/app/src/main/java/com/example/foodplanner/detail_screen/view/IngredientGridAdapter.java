@@ -45,8 +45,8 @@ public class IngredientGridAdapter extends RecyclerView.Adapter<IngredientGridAd
         holder.measureTxt.setText(ingredientList.get(position).getMeasure());
         Glide.with(context).load(ingredientList.get(position).getImageUrl())
                 .apply(new RequestOptions().override(100,100))
-                .placeholder(R.drawable.downloading)
-                .error(R.drawable.broken_image)
+                .placeholder(R.drawable.ingredient)
+                .error(R.drawable.ingredient)
                 .into(holder.imageView);
     }
 

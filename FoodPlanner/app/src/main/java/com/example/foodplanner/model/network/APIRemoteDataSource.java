@@ -173,4 +173,16 @@ public class APIRemoteDataSource implements IApiRemoteDataSource{
         };
         call.enqueue(callback);
     }
+
+    @Override
+    public void getDataFromFirebase(String userID) {
+
+    }
+
+    @Override
+    public void updateDataOnFirebase(String userID) {
+
+    }
+
+
 }

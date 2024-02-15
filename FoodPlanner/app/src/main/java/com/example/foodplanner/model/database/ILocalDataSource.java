@@ -10,14 +10,14 @@ import java.util.List;
 public interface ILocalDataSource {
     void insertMealToFav(Meal meal);
     void insertAllMealsToFav(Meal... meal);
-    LiveData<List<Meal>> getAllFavorite();
-    LiveData<Meal> getFavMealById(String id);
+    LiveData<List<Meal>> getAllFavorite(String userID);
+    LiveData<Meal> getFavMealById(String id, String userID);
     void deleteMealFromFav(Meal meal);
 
     void insertMealToPlan(PlanMeal meal);
     void insertAllMealsToPlan(PlanMeal... meals);
-    LiveData<List<PlanMeal>> getAllPlanMeals();
-    LiveData<PlanMeal> getPlanMealById(String id);
-    LiveData<List<PlanMeal>> getPlanMealByDay(String day);
+    LiveData<List<PlanMeal>> getAllPlanMeals(String userID);
+    LiveData<PlanMeal> getPlanMealById(String id, String userID);
+    LiveData<List<PlanMeal>> getPlanMealByDay(String day, String userID);
     void deleteMealFromPlan(PlanMeal meal);
 }

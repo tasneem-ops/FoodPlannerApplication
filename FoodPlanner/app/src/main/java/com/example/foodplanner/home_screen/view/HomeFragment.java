@@ -60,6 +60,7 @@ public class HomeFragment extends Fragment implements IViewHome, OnItemClickList
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        context = getContext();
         imageMealOfTheDay = view.findViewById(R.id.imageMealOfTheDay);
         txtTitleMealOfTheDay = view.findViewById(R.id.txtTitleMealOfTheDay);
         cardMealOfTheDay = view.findViewById(R.id.cardMealOfTheDay);
@@ -90,10 +91,10 @@ public class HomeFragment extends Fragment implements IViewHome, OnItemClickList
 
     @Override
     public void setMealOfTheDay(Meal meal) {
-        Glide.with(this).load(meal.getImageUrl())
+        Glide.with(context).load(meal.getImageUrl())
                 .apply(new RequestOptions().override(700,700))
-                .placeholder(R.drawable.downloading)
-                .error(R.drawable.broken_image)
+                .placeholder(R.drawable.loading)
+                .error(R.drawable.image_error)
                 .into(imageMealOfTheDay);
         txtTitleMealOfTheDay.setText(meal.getName());
         cardMealOfTheDay.setOnClickListener(new View.OnClickListener() {

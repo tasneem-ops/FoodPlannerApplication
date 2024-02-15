@@ -49,13 +49,13 @@ public class LocalDataSource implements ILocalDataSource{
     }
 
     @Override
-    public LiveData<List<Meal>> getAllFavorite() {
-        return favoritesDao.getAllFavorites();
+    public LiveData<List<Meal>> getAllFavorite(String userID) {
+        return favoritesDao.getAllFavorites(userID);
     }
 
     @Override
-    public LiveData<Meal> getFavMealById(String id) {
-        return favoritesDao.getMealById(id);
+    public LiveData<Meal> getFavMealById(String id, String userID) {
+        return favoritesDao.getMealById(id, userID);
     }
 
     @Override
@@ -89,18 +89,18 @@ public class LocalDataSource implements ILocalDataSource{
     }
 
     @Override
-    public LiveData<List<PlanMeal>> getAllPlanMeals() {
-        return planDao.getAllPlanMeals();
+    public LiveData<List<PlanMeal>> getAllPlanMeals(String userID) {
+        return planDao.getAllPlanMeals(userID);
     }
 
     @Override
-    public LiveData<PlanMeal> getPlanMealById(String id) {
-        return planDao.getMealById(id);
+    public LiveData<PlanMeal> getPlanMealById(String id, String userID) {
+        return planDao.getMealById(id, userID);
     }
 
     @Override
-    public LiveData<List<PlanMeal>> getPlanMealByDay(String day) {
-        return planDao.getMealByDay(day);
+    public LiveData<List<PlanMeal>> getPlanMealByDay(String day, String userID) {
+        return planDao.getMealByDay(day, userID);
     }
 
     @Override

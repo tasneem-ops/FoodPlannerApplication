@@ -2,6 +2,7 @@ package com.example.foodplanner.detail_screen.presenter;
 
 import com.example.foodplanner.detail_screen.view.IViewDetail;
 import com.example.foodplanner.model.dto.Meal;
+import com.example.foodplanner.model.dto.PlanMeal;
 import com.example.foodplanner.model.network.NetworkCallback;
 import com.example.foodplanner.model.repository.Repository;
 
@@ -20,12 +21,12 @@ public class DetailPresenter implements IDetailPresenter, NetworkCallback.MealDe
 
     @Override
     public void addMealToFav(Meal meal){
-
+        repository.insertMealToFav(meal);
     }
 
     @Override
     public void addMealToPlan(Meal meal, String day){
-
+        repository.insertMealToPlan(new PlanMeal(meal, day));
     }
 
     @Override
