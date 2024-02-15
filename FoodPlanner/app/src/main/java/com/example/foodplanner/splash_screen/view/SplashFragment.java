@@ -20,6 +20,12 @@ import com.example.foodplanner.R;
 import com.example.foodplanner.authentication.view.AuthenticationActivity;
 import com.example.foodplanner.home_screen.view.MainActivity;
 
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
+
 
 public class SplashFragment extends Fragment {
     Animation animationLogo, animationSlogan;
@@ -55,10 +61,10 @@ public class SplashFragment extends Fragment {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                Navigation.findNavController(view).navigate(R.id.action_splashFragment_to_viewPagerFragment);
-                Intent intent = new Intent(getContext(), AuthenticationActivity.class);
-                startActivity(intent);
-                requireActivity().finish();
+                Completable.timer(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(()-> {
+                                    Navigation.findNavController(view).navigate(R.id.action_splashFragment_to_viewPagerFragment);
+                                });
             }
 
             @Override
