@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
@@ -29,10 +31,14 @@ import com.example.foodplanner.profile.presenter.ProfilePresenter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 public class ProfileFragment extends Fragment implements IViewProfile{
     FirebaseUser user;
-    Button syncButton, logoutButton;
+    Button syncButton, logoutButton, loginButton;
     TextView profileImagText, profileNameText, profileEmailText;
+    Group group;
+    ConstraintLayout notLoggedInLayout;
     Context context;
     IProfilePresenter presenter;
     @Override
@@ -54,7 +60,19 @@ public class ProfileFragment extends Fragment implements IViewProfile{
         presenter = new ProfilePresenter(this, Repository.getInstance(LocalDataSource.getInstance(context), APIRemoteDataSource.getInstance()));
         user = FirebaseAuth.getInstance().getCurrentUser();
         initUI(view);
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            showNotLoggedIn();
+        }
+        else{
+            showNormalScreen();
+        }
 
+    }
+
+    private void showNormalScreen() {
+        profileImagText.setText(user.getDisplayName().charAt(0) + "");
+        profileNameText.setText(user.getDisplayName());
+        profileEmailText.setText(user.getEmail());
         syncButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,7 +86,20 @@ public class ProfileFragment extends Fragment implements IViewProfile{
                 updateSharedPref();
                 Intent intent = new Intent(getActivity(), AuthenticationActivity.class);
                 startActivity(intent);
-                getActivity().finish();
+                requireActivity().finish();
+            }
+        });
+    }
+
+    private void showNotLoggedIn() {
+        group.setVisibility(View.GONE);
+        notLoggedInLayout.setVisibility(View.VISIBLE);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AuthenticationActivity.class);
+                startActivity(intent);
+                requireActivity().finish();
             }
         });
     }
@@ -79,17 +110,19 @@ public class ProfileFragment extends Fragment implements IViewProfile{
         profileImagText = view.findViewById(R.id.profileImagText);
         profileEmailText = view.findViewById(R.id.profileEmailTxt);
         profileNameText = view.findViewById(R.id.profileNameTxt);
-        profileImagText.setText(""+user.getDisplayName().charAt(0));
-        profileNameText.setText(user.getDisplayName());
-        profileEmailText.setText(user.getEmail());
+        group = view.findViewById(R.id.group);
+        notLoggedInLayout = view.findViewById(R.id.not_loggedin_profile);
+        loginButton = view.findViewById(R.id.login_profile);
     }
     private void updateSharedPref(){
         SharedPreferences sharedPreferences = context.getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);
-        sharedPreferences.edit().putBoolean(AuthConstants.IS_LOGGED_IN, false);
-        sharedPreferences.edit().putString(AuthConstants.GOOGLE_CREDENTIALS, null);
-        sharedPreferences.edit().putString(AuthConstants.EMAIL, null);
-        sharedPreferences.edit().putString(AuthConstants.PASSWORD, null);
-        sharedPreferences.edit().putString(AuthConstants.AUTH_METHOD, null);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(AuthConstants.IS_LOGGED_IN, false);
+        editor.putString(AuthConstants.GOOGLE_CREDENTIALS, null);
+        editor.putString(AuthConstants.EMAIL, null);
+        editor.putString(AuthConstants.PASSWORD, null);
+        editor.putString(AuthConstants.AUTH_METHOD, null);
+        editor.apply();
     }
 
     @Override

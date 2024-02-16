@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="background_protection">#9A000000</color>
+<!-- Primary colors -->
+<color name="colorPrimary">#2196F3</color> <!-- Primary branding color -->
+<color name="colorPrimaryDark">#1976D2</color> <!-- Darker shade of primary color for status bar -->
+<color name="colorAccent">#FF4081</color> <!-- Accent color for UI elements -->
+<color name="colorSecondary">#FFC107</color>
+<!-- Text colors -->
+<color name="textPrimary">#212121</color> <!-- Primary text color -->
+<color name="textSecondary">#757575</color> <!-- Secondary text color -->
+
+<!-- Background colors -->
+<color name="backgroundPrimary">#FFFFFF</color> <!-- Primary background color -->
+<color name="backgroundSecondary">#EEEEEE</color> <!-- Secondary background color -->
+
+<!-- Button colors -->
+<color name="buttonNormal">#FF5722</color> <!-- Normal state button color -->
+<color name="buttonPressed">#E64A19</color> <!-- Pressed state button color -->
+
+<!-- Divider color -->
+<color name="divider">#B6B6B6</color> <!-- Color for dividers -->
+
+<!-- Rating colors -->
+<color name="ratingPositive">#4CAF50</color> <!-- Color for positive ratings -->
+<color name="ratingNeutral">#FFC107</color> <!-- Color for neutral ratings -->
+<color name="ratingNegative">#F44336</color> <!-- Color for negative ratings -->
+
+<!-- Other colors -->
+<!-- Define any additional colors you need here -->
+<color name="black">#FF000000</color>
+<color name="white">#FFFFFFFF</color>
+<color name="background_protection">#9A000000</color>
 </resources>

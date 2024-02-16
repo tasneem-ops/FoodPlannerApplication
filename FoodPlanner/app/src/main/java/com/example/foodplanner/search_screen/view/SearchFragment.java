@@ -52,12 +52,9 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
     SearchResultGridAdapter searchResultGridAdapter;
     List<SearchItem> categoryList, areaList, ingredientList;
     ISearchPresenter presenter;
-    FrameLayout container;
-    Scene sceneOk, sceneEmpty;
     int type = 0;
     Chip categoryChip, areaChip, ingredientChip;
     ChipGroup chipGroup;
-    boolean isSceneOk = true;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

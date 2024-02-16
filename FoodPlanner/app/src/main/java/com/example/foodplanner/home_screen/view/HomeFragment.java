@@ -52,7 +52,6 @@ public class HomeFragment extends Fragment implements IViewHome, OnItemClickList
         super.onCreate(savedInstanceState);
 
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -81,7 +80,6 @@ public class HomeFragment extends Fragment implements IViewHome, OnItemClickList
                 .subscribe(areaList -> {
                     setAreaList(areaList);
                 }, error->{showError(error.getMessage());});
-
     }
 
     private void initRecyclerView(View view) {
@@ -103,9 +101,9 @@ public class HomeFragment extends Fragment implements IViewHome, OnItemClickList
 
     @Override
     public void setMealOfTheDay(Meal meal) {
-        Glide.with(context).load(meal.getImageUrl())
+        Glide.with(context.getApplicationContext()).load(meal.getImageUrl())
                 .apply(new RequestOptions().override(700,700))
-                .placeholder(R.drawable.loading)
+                .placeholder(R.drawable.downloading)
                 .error(R.drawable.image_error)
                 .into(imageMealOfTheDay);
         txtTitleMealOfTheDay.setText(meal.getName());
