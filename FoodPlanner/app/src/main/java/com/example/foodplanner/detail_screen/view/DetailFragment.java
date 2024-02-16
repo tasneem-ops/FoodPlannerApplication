@@ -105,7 +105,7 @@ public class DetailFragment extends Fragment implements IViewDetail{
                     return;
                 currentMeal.setUserID(firebaseUser.getUid());
                 MaterialDatePicker datePicker = MaterialDatePicker.Builder.datePicker()
-                        .setTitleText("Select date")
+                        .setTitleText(R.string.select_date)
                         .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                         .build();
                 datePicker.show(getChildFragmentManager(), "tag");
@@ -114,30 +114,26 @@ public class DetailFragment extends Fragment implements IViewDetail{
                     public void onPositiveButtonClick(Object selection) {
                         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                         calendar.setTimeInMillis((Long) selection);
-//                        calendar = Calendar.getInstance();
                         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                         String selectedDate = dateFormat.format(calendar.getTime());
-                        Toast.makeText(getContext(), "Selected Date: "+ selectedDate, Toast.LENGTH_SHORT).show();
                         presenter.addMealToPlan(currentMeal, selectedDate);
                     }
                 });
                 datePicker.addOnNegativeButtonClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Snackbar.make(view, "Please select a date to save meal to plan", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(view, R.string.please_select_date, Snackbar.LENGTH_SHORT).show();
                     }
                 });
                 datePicker.addOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialogInterface) {
-                        Snackbar.make(view, "Please select a date to save meal to plan", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(view, R.string.please_select_date, Snackbar.LENGTH_SHORT).show();
                     }
                 });
             }
         });
     }
-
-
 
     private void initUI(View view) {
         mealNameTxt = view.findViewById(R.id.mealName);

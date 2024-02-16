@@ -11,7 +11,7 @@ import java.util.List;
 
 import io.reactivex.rxjava3.core.Flowable;
 
-public class LocalDataSource implements ILocalDataSource{
+public class  LocalDataSource implements ILocalDataSource{
     Context context;
     FavoritesDao favoritesDao;
     PlanDao planDao;

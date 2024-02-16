@@ -127,11 +127,11 @@ public class ProfileFragment extends Fragment implements IViewProfile{
 
     @Override
     public void syncSuccessful() {
-        Toast.makeText(context, "Data Synced Successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.data_sync_success, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void syncFaliure() {
-        Toast.makeText(context, "Error Updating Data", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.data_sync_error, Toast.LENGTH_SHORT).show();
     }
 }

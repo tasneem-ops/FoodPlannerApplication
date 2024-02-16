@@ -50,5 +50,14 @@
     <string name="continue_as_guest">Continue as Guest</string>
     <string name="login_google">Login with Google</string>
     <string name="not_logged_in">Content Not Available!\nLogin to view full content</string>
-
+    <string name="country">Country</string>
+    <string name="search_by_ingredient">Search By Ingredient</string>
+    <string name="search_by_country">Search By Origin Country</string>
+    <string name="search_by_category">Search By Category</string>
+    <string name="search_by_meal_name">Search By Meal Name</string>
+    <string name="your_viewing_search">You are Viewing Meals of: %s</string>
+    <string name="please_select_date">Please select a date to save meal to plan</string>
+    <string name="select_date">Select date</string>
+    <string name="data_sync_success">Data Synced Successfully</string>
+    <string name="data_sync_error">Error Updating Data</string>
 </resources>
