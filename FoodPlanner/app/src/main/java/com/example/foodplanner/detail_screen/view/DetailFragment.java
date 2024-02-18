@@ -2,6 +2,8 @@ package com.example.foodplanner.detail_screen.view;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -46,6 +48,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 
 public class DetailFragment extends Fragment implements IViewDetail{
@@ -60,6 +64,7 @@ public class DetailFragment extends Fragment implements IViewDetail{
     Meal currentMeal;
     Context context;
     FirebaseUser firebaseUser;
+    Disposable observableDetails;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,10 +85,8 @@ public class DetailFragment extends Fragment implements IViewDetail{
         initRecyclerView();
         presenter = new DetailPresenter(this, Repository.getInstance(LocalDataSource.getInstance(getContext()), APIRemoteDataSource.getInstance()));
         String id = DetailFragmentArgs.fromBundle(getArguments()).getMealID();
-        presenter.getMealDetails(id).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(meal -> {
-                    setMeal(meal);
-                }, error ->{showError(error.getMessage());});
+        boolean isConnected = checkInternetConnection();
+        presenter.getMealDetails(id, isConnected);
         addToFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,7 +165,13 @@ public class DetailFragment extends Fragment implements IViewDetail{
     }
 
     @Override
-    public void setMeal(Meal meal) {
+    public void setMeal(Single<Meal> observableMeal) {
+        observableDetails = observableMeal.observeOn(AndroidSchedulers.mainThread())
+                .subscribe(meal -> {
+                    updateMealUI(meal);
+                }, error ->{showError(error.getMessage());});
+    }
+    void updateMealUI(Meal meal){
         currentMeal = meal;
         mealNameTxt.setText(meal.getName());
         Glide.with(context).load(meal.getImageUrl())
@@ -182,10 +191,47 @@ public class DetailFragment extends Fragment implements IViewDetail{
             webView.setWebChromeClient(new WebChromeClient());
             webView.getSettings().setJavaScriptEnabled(true);
         }
+        presenter.isFav(meal.getId());
     }
 
     @Override
     public void showError(String errMessage) {
         Toast.makeText(context, errMessage , Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void setFav() {
+        iconFav.setImageResource(R.drawable.favorite_fill);
+        iconFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(currentMeal == null)
+                    return;
+                if(firebaseUser !=null){
+                    currentMeal.setUserID(firebaseUser.getUid());
+                    presenter.deleteMealFromFav(currentMeal)
+                            .observeOn(AndroidSchedulers.mainThread()).subscribe();
+                    iconFav.setImageResource(R.drawable.favorite_empty_white);
+                }
+            }
+        });
+    }
+
+    private boolean checkInternetConnection(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if(networkInfo == null){
+            return false;
+        }
+        return networkInfo.isConnected();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(observableDetails != null && !observableDetails.isDisposed()){
+            observableDetails.dispose();
+        }
+        presenter.unregisterView();
     }
 }

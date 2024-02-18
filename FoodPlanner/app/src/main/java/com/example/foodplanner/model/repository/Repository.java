@@ -46,7 +46,8 @@ public class Repository {
         return localDataSource.getAllFavorite(userID).subscribeOn(Schedulers.io());
     }
     public Flowable<Meal> getFavMealById(String id, String userID){
-        return localDataSource.getFavMealById(id, userID).subscribeOn(Schedulers.io());
+        return localDataSource.getFavMealById(id, userID)
+                .subscribeOn(Schedulers.io());
     }
     public Completable deleteMealFromFav(Meal meal){
         return localDataSource.deleteMealFromFav(meal).subscribeOn(Schedulers.io());
