@@ -95,6 +95,17 @@ public class Meal {
         setInstructions(meal.getInstructions());
         setIngredients(meal.getIngredients());
     }
+    public Meal(PlanMeal meal){
+        setId(meal.getId());
+        setName(meal.getName());
+        setCategory(meal.getCategory());
+        setImageUrl(meal.getImageUrl());
+        setTags(meal.getTags());
+        setVideoUrl(meal.getVideoUrl());
+        setOriginCountry(meal.getOriginCountry());
+        setInstructions(meal.getInstructions());
+        setIngredients(meal.getIngredients());
+    }
     private void addIngredientToList(String ingredient, String measure, ArrayList<MealIngredient> mealIngredients){
         if(ingredient!= null && !(ingredient.equals("")))
             mealIngredients.add(new MealIngredient(ingredient, measure));

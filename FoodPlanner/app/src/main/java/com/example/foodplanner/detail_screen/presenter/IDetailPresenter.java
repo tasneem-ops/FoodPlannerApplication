@@ -7,9 +7,12 @@ import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
 public interface IDetailPresenter {
-    @NonNull Single<Meal> getMealDetails(String id);
+    void getMealDetails(String id, boolean isConnected);
 
     Completable addMealToFav(Meal meal);
 
     Completable addMealToPlan(Meal meal, String day);
+    Completable deleteMealFromFav(Meal meal);
+    void unregisterView();
+    void isFav(String id);
 }

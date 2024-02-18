@@ -19,6 +19,8 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+
 public class AuthPresenter implements IAuthPresenter {
     Repository repository;
 
@@ -42,9 +44,11 @@ public class AuthPresenter implements IAuthPresenter {
                         List<Meal> favMeals = gson.fromJson(document.getString("Favorites"), listType);
                         List<Meal> planMeals = gson.fromJson(document.getString("Plan"), listPlanType);
                         if(favMeals != null)
-                            repository.insertAllMealsToFav(favMeals.toArray(new Meal[0]));
+                            repository.insertAllMealsToFav(favMeals.toArray(new Meal[0]))
+                                    .observeOn(AndroidSchedulers.mainThread()).subscribe();
                         if(planMeals != null)
-                            repository.insertAllMealsToPlan(planMeals.toArray(new PlanMeal[0]));
+                            repository.insertAllMealsToPlan(planMeals.toArray(new PlanMeal[0]))
+                                    .observeOn(AndroidSchedulers.mainThread()).subscribe();
                     } else {
                     }
                 } else {

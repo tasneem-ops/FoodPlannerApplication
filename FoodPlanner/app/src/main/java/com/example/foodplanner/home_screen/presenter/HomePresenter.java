@@ -24,7 +24,7 @@ public class HomePresenter implements IHomePresenter {
     Repository repository;
     IViewHome view;
 
-    Disposable  x , y;
+    Disposable  x , y, z;
     int c =0;
     public HomePresenter(IViewHome view, Repository repository) {
         this.repository = repository;
@@ -46,7 +46,7 @@ public class HomePresenter implements IHomePresenter {
                             y = repository.getMealOfTheDay().map(apiMealsList -> new Meal(apiMealsList.getMeals().get(0)))
                                     .subscribe(apiMeal ->{
                                         Log.i(TAG, "getMealOfTheDay: Inserting meal to db");
-                                        repository.insertInspirationMeal(new InspirationMeal(apiMeal, date))
+                                        z = repository.insertInspirationMeal(new InspirationMeal(apiMeal, date))
                                                 .subscribe(()->{
                                                     Log.i(TAG, "getMealOfTheDay: On Complete");
                                                 }, error->{
@@ -98,6 +98,9 @@ public class HomePresenter implements IHomePresenter {
         }
         if(y != null && !y.isDisposed()){
             y.dispose();
+        }
+        if(z != null && !z.isDisposed()){
+            z.dispose();
         }
     }
 }
