@@ -15,8 +15,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:startIconDrawable="@drawable/search">
-
+        app:startIconDrawable="@drawable/search"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/inputEditText"
             android:layout_width="match_parent"

@@ -15,12 +15,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:gravity="center"
             android:text="@string/meal_of_the_day"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/cardMealOfTheDay"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/cardMealOfTheDay" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardMealOfTheDay"
