@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 
 public class FavPresenter implements IFavPresenter{
@@ -26,7 +27,7 @@ public class FavPresenter implements IFavPresenter{
     }
 
     @Override
-    public void deleteFavMeal(Meal meal) {
-        repository.deleteMealFromFav(meal);
+    public Completable deleteFavMeal(Meal meal) {
+        return repository.deleteMealFromFav(meal);
     }
 }

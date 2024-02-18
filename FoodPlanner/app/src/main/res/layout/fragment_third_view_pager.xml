@@ -23,7 +23,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:fontFamily="monospace"
         android:text="@string/view_pager_3_title"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"

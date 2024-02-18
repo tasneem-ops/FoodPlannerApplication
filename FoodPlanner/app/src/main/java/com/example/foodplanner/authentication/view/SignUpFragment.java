@@ -30,6 +30,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -39,15 +40,18 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.gson.Gson;
 
+import java.util.Objects;
+
 public class SignUpFragment extends Fragment{
     private FirebaseAuth mAuth;
     Button signUpButton;
     TextInputEditText inputName, inputEmail, inputPassword, inputConfrimPassword;
     TextView alreadyHavAcc;
-    ImageView googleSignup;
+    MaterialButton googleSignup, guestButton;
     GoogleSignInOptions options;
     GoogleSignInClient client;
     SharedPreferences authSharedPreferences;
+    Context context;
     private static final int REQ_ONE_TAP = 2;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +60,7 @@ public class SignUpFragment extends Fragment{
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        client = GoogleSignIn.getClient(getActivity(),options);
+        client = GoogleSignIn.getClient(requireActivity(),options);
     }
 
     @Override
@@ -68,15 +72,16 @@ public class SignUpFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        context = getContext();
         initUI(view);
         mAuth = FirebaseAuth.getInstance();
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name = inputName.getText().toString();
-                String email = inputEmail.getText().toString();
-                String password = inputPassword.getText().toString();
-                String confirmPassword = inputConfrimPassword.getText().toString();
+                String name = Objects.requireNonNull(inputName.getText()).toString();
+                String email = Objects.requireNonNull(inputEmail.getText()).toString();
+                String password = Objects.requireNonNull(inputPassword.getText()).toString();
+                String confirmPassword = Objects.requireNonNull(inputConfrimPassword.getText()).toString();
                 registerUser(name, email, password, confirmPassword);
             }
         });
@@ -89,9 +94,18 @@ public class SignUpFragment extends Fragment{
         googleSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent = client.getSignInIntent();
                 startActivityForResult(intent, REQ_ONE_TAP);
+            }
+        });
+        guestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                authSharedPreferences = context.getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);
+                authSharedPreferences.edit().putBoolean(AuthConstants.IS_LOGGED_IN, false).apply();
+                Intent intent = new Intent(context, MainActivity.class);
+                startActivity(intent);
+                requireActivity().finish();
             }
         });
     }
@@ -102,6 +116,7 @@ public class SignUpFragment extends Fragment{
         inputPassword = view.findViewById(R.id.inputPasswordSignup);
         inputConfrimPassword = view.findViewById(R.id.inputConfirmPassword);
         googleSignup = view.findViewById(R.id.googleSignup);
+        guestButton = view.findViewById(R.id.guestButton);
         alreadyHavAcc = view.findViewById(R.id.alreadyHavAccText);
     }
 
@@ -119,11 +134,11 @@ public class SignUpFragment extends Fragment{
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(getActivity(), "Google Sign in Successful", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "Google Sign in Successful", Toast.LENGTH_SHORT).show();
                                     saveGoogleCredentials(credential);
                                     onSignupSuccess();
                                 } else {
-                                    Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -137,7 +152,7 @@ public class SignUpFragment extends Fragment{
     private void registerUser(String name, String email, String password, String confirmPassword) {
         if(validateInput(name, email, password, confirmPassword)){
             mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -146,48 +161,75 @@ public class SignUpFragment extends Fragment{
                             FirebaseUser user = mAuth.getCurrentUser();
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                     .setDisplayName(name).build();
-                            user.updateProfile(profileUpdates);
+                            if(user != null)
+                                user.updateProfile(profileUpdates);
                             saveEmailCredentials(email, password);
                             onSignupSuccess();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(getActivity(), "Authentication Failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Authentication Failed", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
         }
+        else{
+            onInputNotValid();
+        }
     }
     private boolean validateInput(String name, String email, String password, String confirmPassword) {
-        if (email.equals("") || password.equals("")|| name.equals("") ||confirmPassword.equals("") || !(confirmPassword.equals(password))) {
+        if(email.equals("")){
+            inputEmail.setError("Please Enter Your Email");
+        }
+        if(password.equals("")){
+            inputPassword.setError("Please Enter Password");
+        }
+        if(confirmPassword.equals("")){
+            inputConfrimPassword.setError("Please Enter Password Confirmation");
+        }
+        if(name.equals("")){
+            inputName.setError("Please Enter Your Full Name");
+        }
+        if(password.length() < 6){
+            inputPassword.setError("Password Must be Longer than 6 characters");
+        }
+        if(!(confirmPassword.equals(password))){
+            inputConfrimPassword.setError("Password and Confirmation don't match");
+        }
+        if (email.equals("") || password.equals("")|| name.equals("") ||confirmPassword.equals("")
+                || !(confirmPassword.equals(password)) || (password.length() < 6)) {
             return false;
         }
         return true;
     }
     private void saveGoogleCredentials(AuthCredential credential){
-        authSharedPreferences = getActivity().getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);
+        authSharedPreferences = requireActivity().getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = authSharedPreferences.edit();
         Gson gson = new Gson();
         String credentialString = gson.toJson(credential);
-        authSharedPreferences.edit().putString(AuthConstants.GOOGLE_CREDENTIALS, credentialString);
-        authSharedPreferences.edit().putBoolean(AuthConstants.IS_LOGGED_IN, true);
-        authSharedPreferences.edit().putString(AuthConstants.AUTH_METHOD, AuthConstants.AUTH_GOOGLE);
+        editor.putString(AuthConstants.GOOGLE_CREDENTIALS, credentialString);
+        editor.putBoolean(AuthConstants.IS_LOGGED_IN, true);
+        editor.putString(AuthConstants.AUTH_METHOD, AuthConstants.AUTH_GOOGLE);
+        editor.apply();
     }
     private void saveEmailCredentials(String email, String password){
-        authSharedPreferences = getActivity().getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);
-        authSharedPreferences.edit().putString(AuthConstants.EMAIL, email);
-        authSharedPreferences.edit().putString(AuthConstants.PASSWORD, password);
-        authSharedPreferences.edit().putBoolean(AuthConstants.IS_LOGGED_IN, true);
-        authSharedPreferences.edit().putString(AuthConstants.AUTH_METHOD, AuthConstants.EMAIL);
+        authSharedPreferences = requireActivity().getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = authSharedPreferences.edit();
+        editor.putString(AuthConstants.EMAIL, email);
+        editor.putString(AuthConstants.PASSWORD, password);
+        editor.putBoolean(AuthConstants.IS_LOGGED_IN, true);
+        editor.putString(AuthConstants.AUTH_METHOD, AuthConstants.EMAIL);
+        editor.apply();
     }
     public void onSignupSuccess() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
-        getActivity().finish();
+        requireActivity().finish();
     }
 
     public void onInputNotValid() {
-
+        Toast.makeText(context, "Input Not Valid", Toast.LENGTH_SHORT).show();
     }
     public void onSignupFailed() {
-
+        Toast.makeText(context, "Authentication Failed", Toast.LENGTH_SHORT).show();
     }
 }

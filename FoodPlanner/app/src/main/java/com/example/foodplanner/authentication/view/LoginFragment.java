@@ -36,27 +36,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.checkerframework.checker.units.qual.A;
-
-import java.lang.reflect.Type;
-import java.util.List;
 
 public class LoginFragment extends Fragment{
     TextView newUser;
     Button loginButton;
-    ImageView googleLogin;
+    MaterialButton googleLogin, guestLogin;
     TextInputEditText inputEmail, inputPassword;
     private static final int REQUEST_AUTH = 2;
     GoogleSignInOptions options;
@@ -115,11 +107,22 @@ public class LoginFragment extends Fragment{
                 startActivityForResult(intent, REQUEST_AUTH);
             }
         });
+        guestLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                authSharedPreferences = context.getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);
+                authSharedPreferences.edit().putBoolean(AuthConstants.IS_LOGGED_IN, false);
+                Intent intent = new Intent(context, MainActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
     }
     private void initUI(View view) {
         newUser = view.findViewById(R.id.newUserText);
         loginButton = view.findViewById(R.id.loginButton);
         googleLogin = view.findViewById(R.id.googleLogin);
+        guestLogin = view.findViewById(R.id.guestLogin);
         inputEmail = view.findViewById(R.id.inputEmailLogin);
         inputPassword = view.findViewById(R.id.inputPasswordLogin);
     }
@@ -177,6 +180,7 @@ public class LoginFragment extends Fragment{
     }
 
     private boolean validateInput(String email, String password) {
+        if(email.equals(""))
         if (email.equals("") || password.equals("")) {
             return false;
         }
@@ -191,10 +195,10 @@ public class LoginFragment extends Fragment{
     }
 
     public void onInputNotValid() {
-        Toast.makeText(getContext(), "Input Not Valid", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Input Not Valid", Toast.LENGTH_SHORT).show();
     }
     public void onLoginFailed() {
-        Toast.makeText(getContext(), "Login Failed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Login Failed", Toast.LENGTH_SHORT).show();
     }
     private void saveGoogleCredentials(AuthCredential credential){
         authSharedPreferences = context.getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);

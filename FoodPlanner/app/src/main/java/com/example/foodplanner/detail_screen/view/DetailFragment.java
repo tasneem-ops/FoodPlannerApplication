@@ -36,6 +36,7 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,6 +59,7 @@ public class DetailFragment extends Fragment implements IViewDetail{
     CardView addToFav, addToPlan;
     Meal currentMeal;
     Context context;
+    FirebaseUser firebaseUser;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +75,7 @@ public class DetailFragment extends Fragment implements IViewDetail{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         context = getContext();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         initUI(view);
         initRecyclerView();
         presenter = new DetailPresenter(this, Repository.getInstance(LocalDataSource.getInstance(getContext()), APIRemoteDataSource.getInstance()));
@@ -86,9 +89,12 @@ public class DetailFragment extends Fragment implements IViewDetail{
             public void onClick(View view) {
                 if(currentMeal == null)
                     return;
-                currentMeal.setUserID(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                presenter.addMealToFav(currentMeal);
-                iconFav.setImageResource(R.drawable.favorite_fill);
+                if(firebaseUser !=null){
+                    currentMeal.setUserID(firebaseUser.getUid());
+                    presenter.addMealToFav(currentMeal)
+                            .observeOn(AndroidSchedulers.mainThread()).subscribe();
+                    iconFav.setImageResource(R.drawable.favorite_fill);
+                }
             }
         });
         addToPlan.setOnClickListener(new View.OnClickListener() {
@@ -96,9 +102,11 @@ public class DetailFragment extends Fragment implements IViewDetail{
             public void onClick(View view) {
                 if(currentMeal == null)
                     return;
-                currentMeal.setUserID(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                if(firebaseUser == null)
+                    return;
+                currentMeal.setUserID(firebaseUser.getUid());
                 MaterialDatePicker datePicker = MaterialDatePicker.Builder.datePicker()
-                        .setTitleText("Select date")
+                        .setTitleText(R.string.select_date)
                         .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                         .build();
                 datePicker.show(getChildFragmentManager(), "tag");
@@ -107,30 +115,27 @@ public class DetailFragment extends Fragment implements IViewDetail{
                     public void onPositiveButtonClick(Object selection) {
                         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                         calendar.setTimeInMillis((Long) selection);
-//                        calendar = Calendar.getInstance();
                         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                         String selectedDate = dateFormat.format(calendar.getTime());
-                        Toast.makeText(getContext(), "Selected Date: "+ selectedDate, Toast.LENGTH_SHORT).show();
-                        presenter.addMealToPlan(currentMeal, selectedDate);
+                        presenter.addMealToPlan(currentMeal, selectedDate)
+                                .observeOn(AndroidSchedulers.mainThread()).subscribe();
                     }
                 });
                 datePicker.addOnNegativeButtonClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Snackbar.make(view, "Please select a date to save meal to plan", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(view, R.string.please_select_date, Snackbar.LENGTH_SHORT).show();
                     }
                 });
                 datePicker.addOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialogInterface) {
-                        Snackbar.make(view, "Please select a date to save meal to plan", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(view, R.string.please_select_date, Snackbar.LENGTH_SHORT).show();
                     }
                 });
             }
         });
     }
-
-
 
     private void initUI(View view) {
         mealNameTxt = view.findViewById(R.id.mealName);
@@ -143,6 +148,10 @@ public class DetailFragment extends Fragment implements IViewDetail{
         addToPlan = view.findViewById(R.id.add_to_plan);
         iconFav = view.findViewById(R.id.icon_fav);
         iconSchedule = view.findViewById(R.id.icon_schedule);
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            addToFav.setVisibility(View.GONE);
+            addToPlan.setVisibility(View.GONE);
+        }
     }
     private void initRecyclerView() {
         layoutManager = new GridLayoutManager(getContext(), 3);

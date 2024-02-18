@@ -84,6 +84,17 @@ public class Meal {
         addIngredientToList(meal.getStrIngredient20(), meal.getStrMeasure20(), ingredientsList);
         setIngredients(ingredientsList);
     }
+    public Meal(InspirationMeal meal){
+        setId(meal.getId());
+        setName(meal.getName());
+        setCategory(meal.getCategory());
+        setImageUrl(meal.getImageUrl());
+        setTags(meal.getTags());
+        setVideoUrl(meal.getVideoUrl());
+        setOriginCountry(meal.getOriginCountry());
+        setInstructions(meal.getInstructions());
+        setIngredients(meal.getIngredients());
+    }
     private void addIngredientToList(String ingredient, String measure, ArrayList<MealIngredient> mealIngredients){
         if(ingredient!= null && !(ingredient.equals("")))
             mealIngredients.add(new MealIngredient(ingredient, measure));

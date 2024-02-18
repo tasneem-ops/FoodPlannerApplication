@@ -1,6 +1,8 @@
 package com.example.foodplanner.home_screen.view;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -35,6 +37,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment implements IViewHome, OnItemClickListener{
@@ -47,12 +51,12 @@ public class HomeFragment extends Fragment implements IViewHome, OnItemClickList
     CardView cardMealOfTheDay;
     LinearLayoutManager categorylayoutManager, arealayoutManager;
     Context context;
+    Disposable mealDisposable, categoryListDisposable, areaListDisposable;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,19 +73,31 @@ public class HomeFragment extends Fragment implements IViewHome, OnItemClickList
         cardMealOfTheDay = view.findViewById(R.id.cardMealOfTheDay);
         initRecyclerView(view);
         presenter = new HomePresenter(this, Repository.getInstance(LocalDataSource.getInstance(getContext()),APIRemoteDataSource.getInstance()));
-        presenter.getMealOfTheDay().observeOn(AndroidSchedulers.mainThread())
-                .subscribe(meal ->{
-                    setMealOfTheDay(meal);
-                }, error->{showError(error.getMessage());});
-        presenter.getCategoryList().observeOn(AndroidSchedulers.mainThread())
+        boolean isConnected = checkInternetConnection();
+        presenter.getMealOfTheDay(isConnected);
+        categoryListDisposable = presenter.getCategoryList().observeOn(AndroidSchedulers.mainThread())
                 .subscribe(categoryList -> {
                     setCategoryList(categoryList);
                 }, error ->{showError(error.getMessage());});
-        presenter.getAreaList().observeOn(AndroidSchedulers.mainThread())
+        areaListDisposable = presenter.getAreaList().observeOn(AndroidSchedulers.mainThread())
                 .subscribe(areaList -> {
                     setAreaList(areaList);
                 }, error->{showError(error.getMessage());});
+    }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(mealDisposable != null && !mealDisposable.isDisposed()){
+            mealDisposable.dispose();
+        }
+        if(categoryListDisposable != null && !categoryListDisposable.isDisposed()){
+            categoryListDisposable.dispose();
+        }
+        if(areaListDisposable != null && !areaListDisposable.isDisposed()){
+            areaListDisposable.dispose();
+        }
+        presenter.unregisterView();
     }
 
     private void initRecyclerView(View view) {
@@ -102,10 +118,16 @@ public class HomeFragment extends Fragment implements IViewHome, OnItemClickList
     }
 
     @Override
-    public void setMealOfTheDay(Meal meal) {
-        Glide.with(context).load(meal.getImageUrl())
+    public void setMealOfTheDay(Single<Meal> mealObservable) {
+        mealDisposable = mealObservable.observeOn(AndroidSchedulers.mainThread())
+                .subscribe(meal ->{
+                    updateMealOfTheDayUI(meal);
+                }, error->{showError(error.getMessage());});
+    }
+    private void updateMealOfTheDayUI(Meal meal){
+        Glide.with(context.getApplicationContext()).load(meal.getImageUrl())
                 .apply(new RequestOptions().override(700,700))
-                .placeholder(R.drawable.loading)
+                .placeholder(R.drawable.downloading)
                 .error(R.drawable.image_error)
                 .into(imageMealOfTheDay);
         txtTitleMealOfTheDay.setText(meal.getName());
@@ -153,5 +175,14 @@ public class HomeFragment extends Fragment implements IViewHome, OnItemClickList
     public void onAreaClicked(Area area) {
         HomeFragmentDirections.ActionHomeFragmentToSearchFragment action = HomeFragmentDirections.actionHomeFragmentToSearchFragment().setName(area.getName()).setType(Types.COUNTRY);
         Navigation.findNavController(imageMealOfTheDay).navigate(action);
+    }
+
+    private boolean checkInternetConnection(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if(networkInfo == null){
+            return false;
+        }
+        return networkInfo.isConnected();
     }
 }

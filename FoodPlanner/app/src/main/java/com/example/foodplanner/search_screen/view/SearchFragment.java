@@ -52,12 +52,9 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
     SearchResultGridAdapter searchResultGridAdapter;
     List<SearchItem> categoryList, areaList, ingredientList;
     ISearchPresenter presenter;
-    FrameLayout container;
-    Scene sceneOk, sceneEmpty;
     int type = 0;
     Chip categoryChip, areaChip, ingredientChip;
     ChipGroup chipGroup;
-    boolean isSceneOk = true;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,15 +83,15 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
             presenter.getCategoryList().observeOn(AndroidSchedulers.mainThread())
                     .subscribe(categoryList1 -> {
                         setCategoryList(categoryList1);
-                    });
+                    }, error-> showError(error.getMessage()));
             presenter.getCountryList().observeOn(AndroidSchedulers.mainThread())
                     .subscribe(areaList1 -> {
                         setCountryList(areaList1);
-                    });
+                    }, error-> showError(error.getMessage()));
             presenter.getIngredientList().observeOn(AndroidSchedulers.mainThread())
                     .subscribe(ingredientList1->{
                         setIngredientList(ingredientList1);
-                    });
+                    }, error-> showError(error.getMessage()));
         }
 
     }
@@ -116,7 +113,7 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     updateList(categoryList);
-                    textInputLayout.setHint("Search By Category");
+                    textInputLayout.setHint(R.string.search_by_category);
                     textInputEditText.setText("");
                     type = Types.CATEGORY;
                 }
@@ -127,7 +124,7 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     updateList(areaList);
-                    textInputLayout.setHint("Search By Origin Country");
+                    textInputLayout.setHint(R.string.search_by_country);
                     textInputEditText.setText("");
                     type = Types.COUNTRY;
                 }
@@ -138,7 +135,7 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     updateList(ingredientList);
-                    textInputLayout.setHint("Search By Ingredient");
+                    textInputLayout.setHint(R.string.search_by_ingredient);
                     textInputEditText.setText("");
                     type = Types.INGREDIENT;
                 }
@@ -190,7 +187,6 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
     @Override
     public void setMealList(List<SearchItem> list) {
         updateList(list);
-        Toast.makeText(getContext(), "List Size" + list.size(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -230,10 +226,9 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
                 .subscribe(meals ->{
                     setMealList(meals);
                 }, error -> showError(error.getMessage()));
-        Toast.makeText(getContext(), "Searching By: "+ name , Toast.LENGTH_SHORT).show();
-        textInputEditText.setHint("Search By Meal Name");
+        textInputEditText.setHint(R.string.search_by_meal_name);
         chipGroup.setVisibility(View.GONE);
-        filterByText.setText("You are Viewing Meals of: "+ name);
+        filterByText.setText(String.format(getResources().getString(R.string.your_viewing_search), name));
         type = Types.MEAL;
     }
 }

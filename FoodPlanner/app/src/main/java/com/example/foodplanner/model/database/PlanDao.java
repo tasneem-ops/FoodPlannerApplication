@@ -12,15 +12,16 @@ import com.example.foodplanner.model.dto.PlanMeal;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 
 @Dao
 public interface PlanDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertMeal(PlanMeal meal);
+    Completable insertMeal(PlanMeal meal);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAllMeals(PlanMeal... meals);
+    Completable insertAllMeals(PlanMeal... meals);
 
     @Query("SELECT * FROM plan_meals WHERE userID= :userID")
     Flowable<List<PlanMeal>> getAllPlanMeals(String userID);
@@ -32,5 +33,5 @@ public interface PlanDao {
     Flowable<List<PlanMeal>> getMealByDay(String day, String userID);
 
     @Delete
-    void deleteMeal(PlanMeal meal);
+    Completable deleteMeal(PlanMeal meal);
 }

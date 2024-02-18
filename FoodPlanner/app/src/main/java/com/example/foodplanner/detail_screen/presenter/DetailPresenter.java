@@ -6,6 +6,7 @@ import com.example.foodplanner.model.dto.PlanMeal;
 import com.example.foodplanner.model.repository.Repository;
 
 import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
 public class DetailPresenter implements IDetailPresenter{
@@ -22,12 +23,12 @@ public class DetailPresenter implements IDetailPresenter{
     }
 
     @Override
-    public void addMealToFav(Meal meal){
-        repository.insertMealToFav(meal);
+    public Completable addMealToFav(Meal meal){
+        return repository.insertMealToFav(meal);
     }
 
     @Override
-    public void addMealToPlan(Meal meal, String day){
-        repository.insertMealToPlan(new PlanMeal(meal, day));
+    public Completable addMealToPlan(Meal meal, String day){
+        return repository.insertMealToPlan(new PlanMeal(meal, day));
     }
 }

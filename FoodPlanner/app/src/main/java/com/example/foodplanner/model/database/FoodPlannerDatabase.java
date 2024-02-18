@@ -7,15 +7,17 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import com.example.foodplanner.model.dto.InspirationMeal;
 import com.example.foodplanner.model.dto.Meal;
 import com.example.foodplanner.model.dto.PlanMeal;
 
-@Database(entities = {Meal.class, PlanMeal.class}, version = 2, exportSchema = false)
+@Database(entities = {Meal.class, PlanMeal.class, InspirationMeal.class}, version = 3, exportSchema = false)
 @TypeConverters({ArrayTypeConverter.class})
 public abstract class FoodPlannerDatabase extends RoomDatabase {
     private static FoodPlannerDatabase instance = null;
     public abstract FavoritesDao getFavoritesDao();
     public abstract PlanDao getPlanDao();
+    public abstract InspirationMealDao getInspirationalMealDao();
 
     public static synchronized FoodPlannerDatabase getInstance(Context context){
         if(instance == null){

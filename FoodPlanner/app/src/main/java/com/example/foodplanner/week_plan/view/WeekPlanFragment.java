@@ -2,10 +2,13 @@ package com.example.foodplanner.week_plan.view;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -17,10 +20,12 @@ import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.foodplanner.R;
+import com.example.foodplanner.authentication.view.AuthenticationActivity;
 import com.example.foodplanner.model.database.LocalDataSource;
 import com.example.foodplanner.model.dto.PlanMeal;
 import com.example.foodplanner.model.network.APIRemoteDataSource;
@@ -30,6 +35,7 @@ import com.example.foodplanner.week_plan.presenter.WeekPlanPresenter;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,6 +53,9 @@ public class WeekPlanFragment extends Fragment implements IViewWeekPlan, OnPlanM
     TextView picDate;
     LinearLayoutManager todayLayoutManager, tomorrowLayoutManager, anyDayLayoutManager;
     PlanMealListAdapter todayAdapter, tomorrowAdapter, anyDayAdapter;
+    ConstraintLayout notLoggedInLayout;
+    Group group;
+    Button loginButton;
     Context context;
     IWeekPlanPresenter presenter;
     String selectedDate = "";
@@ -68,15 +77,21 @@ public class WeekPlanFragment extends Fragment implements IViewWeekPlan, OnPlanM
         context = getContext();
         initUI(view);
         initRecyclerView();
-        presenter = new WeekPlanPresenter(this, Repository.getInstance(LocalDataSource.getInstance(context), APIRemoteDataSource.getInstance()));
-        presenter.getTodayList();
-        presenter.getTomorrowList();
-        picDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDatePicker();
-            }
-        });
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            showNotLoggedIn();
+        }
+        else {
+            presenter = new WeekPlanPresenter(this, Repository.getInstance(LocalDataSource.getInstance(context), APIRemoteDataSource.getInstance()));
+            presenter.getTodayList();
+            presenter.getTomorrowList();
+            picDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showDatePicker();
+                }
+            });
+        }
+
     }
 
     private void initRecyclerView() {
@@ -107,8 +122,22 @@ public class WeekPlanFragment extends Fragment implements IViewWeekPlan, OnPlanM
         tomorrowRecyclerView = view.findViewById(R.id.tomorrowRecyclerView);
         anyDayRecyclerView = view.findViewById(R.id.anyDayRecyclerView);
         picDate = view.findViewById(R.id.pic_date);
+        group = view.findViewById(R.id.group_plan);
+        notLoggedInLayout = view.findViewById(R.id.not_loggedin_plan);
+        loginButton = view.findViewById(R.id.login_plan);
     }
-
+    private void showNotLoggedIn() {
+        group.setVisibility(View.GONE);
+        notLoggedInLayout.setVisibility(View.VISIBLE);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AuthenticationActivity.class);
+                startActivity(intent);
+                requireActivity().finish();
+            }
+        });
+    }
     @Override
     public void onPlanMealClicked(PlanMeal planMeal) {
         WeekPlanFragmentDirections.ActionWeekPlanFragmentToDetailFragment action = WeekPlanFragmentDirections.actionWeekPlanFragmentToDetailFragment(planMeal.getId());

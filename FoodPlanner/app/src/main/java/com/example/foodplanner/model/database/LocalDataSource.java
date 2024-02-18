@@ -2,19 +2,20 @@ package com.example.foodplanner.model.database;
 
 import android.content.Context;
 
-import androidx.lifecycle.LiveData;
-
+import com.example.foodplanner.model.dto.InspirationMeal;
 import com.example.foodplanner.model.dto.Meal;
 import com.example.foodplanner.model.dto.PlanMeal;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 
-public class LocalDataSource implements ILocalDataSource{
+public class  LocalDataSource implements ILocalDataSource{
     Context context;
     FavoritesDao favoritesDao;
     PlanDao planDao;
+    InspirationMealDao inspirationMealDao;
     FoodPlannerDatabase db;
 
     private static LocalDataSource instance = null;
@@ -23,6 +24,7 @@ public class LocalDataSource implements ILocalDataSource{
         db =FoodPlannerDatabase.getInstance(context);
         favoritesDao = db.getFavoritesDao();
         planDao = db.getPlanDao();
+        inspirationMealDao = db.getInspirationalMealDao();
     }
     public static LocalDataSource getInstance(Context context){
         if(instance == null){
@@ -31,23 +33,13 @@ public class LocalDataSource implements ILocalDataSource{
         return instance;
     }
     @Override
-    public void insertMealToFav(Meal meal) {
-        new Thread(){
-            @Override
-            public void run() {
-                favoritesDao.insertMeal(meal);
-            }
-        }.start();
+    public Completable insertMealToFav(Meal meal) {
+        return favoritesDao.insertMeal(meal);
     }
 
     @Override
-    public void insertAllMealsToFav(Meal... meals) {
-        new Thread(){
-            @Override
-            public void run() {
-                favoritesDao.insertAllMeals(meals);
-            }
-        }.start();
+    public Completable insertAllMealsToFav(Meal... meals) {
+        return favoritesDao.insertAllMeals(meals);
     }
 
     @Override
@@ -61,33 +53,18 @@ public class LocalDataSource implements ILocalDataSource{
     }
 
     @Override
-    public void deleteMealFromFav(Meal meal) {
-        new Thread(){
-            @Override
-            public void run() {
-                favoritesDao.deleteMeal(meal);
-            }
-        }.start();
+    public Completable deleteMealFromFav(Meal meal) {
+        return favoritesDao.deleteMeal(meal);
     }
 
     @Override
-    public void insertMealToPlan(PlanMeal meal) {
-        new Thread(){
-            @Override
-            public void run() {
-                planDao.insertMeal(meal);
-            }
-        }.start();
+    public Completable insertMealToPlan(PlanMeal meal) {
+        return planDao.insertMeal(meal);
     }
 
     @Override
-    public void insertAllMealsToPlan(PlanMeal... meals) {
-        new Thread(){
-            @Override
-            public void run() {
-                planDao.insertAllMeals(meals);
-            }
-        }.start();
+    public Completable insertAllMealsToPlan(PlanMeal... meals) {
+        return planDao.insertAllMeals(meals);
     }
 
     @Override
@@ -106,12 +83,22 @@ public class LocalDataSource implements ILocalDataSource{
     }
 
     @Override
-    public void deleteMealFromPlan(PlanMeal meal) {
-        new Thread(){
-            @Override
-            public void run() {
-                planDao.deleteMeal(meal);
-            }
-        }.start();
+    public Completable deleteMealFromPlan(PlanMeal meal) {
+        return planDao.deleteMeal(meal);
+    }
+
+    @Override
+    public Completable insertInspirationMeal(InspirationMeal meal) {
+        return inspirationMealDao.insertMeal(meal);
+    }
+
+    @Override
+    public Flowable<List<InspirationMeal>> getInspirationMeal() {
+        return inspirationMealDao.getMeal();
+    }
+
+    @Override
+    public Completable deleteAllInspirationMeals() {
+        return inspirationMealDao.deleteAll();
     }
 }
