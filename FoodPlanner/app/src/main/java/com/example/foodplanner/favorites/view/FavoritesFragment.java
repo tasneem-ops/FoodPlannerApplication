@@ -107,7 +107,7 @@ public class FavoritesFragment extends Fragment implements IViewFav,OnFavClickLi
 
     @Override
     public void onDeleteClick(Meal meal) {
-        presenter.deleteFavMeal(meal);
+        presenter.deleteFavMeal(meal).observeOn(AndroidSchedulers.mainThread()).subscribe();
     }
 
     @Override

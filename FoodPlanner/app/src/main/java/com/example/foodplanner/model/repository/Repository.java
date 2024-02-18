@@ -8,11 +8,15 @@ import com.example.foodplanner.model.dto.ApiIngridientList;
 import com.example.foodplanner.model.dto.ApiMealsList;
 import com.example.foodplanner.model.dto.AreaList;
 import com.example.foodplanner.model.dto.CategoryList;
+import com.example.foodplanner.model.dto.InspirationMeal;
 import com.example.foodplanner.model.dto.Meal;
 import com.example.foodplanner.model.dto.PlanMeal;
 import com.example.foodplanner.model.network.IApiRemoteDataSource;
+
+import java.util.Collections;
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -32,11 +36,11 @@ public class Repository {
         }
         return instance;
     }
-    public void insertMealToFav(Meal meal){
-        localDataSource.insertMealToFav(meal);
+    public Completable insertMealToFav(Meal meal){
+        return localDataSource.insertMealToFav(meal).subscribeOn(Schedulers.io());
     }
-    public void insertAllMealsToFav(Meal... meals){
-        localDataSource.insertAllMealsToFav(meals);
+    public Completable insertAllMealsToFav(Meal... meals){
+        return localDataSource.insertAllMealsToFav(meals).subscribeOn(Schedulers.io());
     }
     public Flowable<List<Meal>> getAllFavorite(String userID){
         return localDataSource.getAllFavorite(userID).subscribeOn(Schedulers.io());
@@ -44,15 +48,15 @@ public class Repository {
     public Flowable<Meal> getFavMealById(String id, String userID){
         return localDataSource.getFavMealById(id, userID).subscribeOn(Schedulers.io());
     }
-    public void deleteMealFromFav(Meal meal){
-        localDataSource.deleteMealFromFav(meal);
+    public Completable deleteMealFromFav(Meal meal){
+        return localDataSource.deleteMealFromFav(meal).subscribeOn(Schedulers.io());
     }
 
-    public void insertMealToPlan(PlanMeal meal){
-        localDataSource.insertMealToPlan(meal);
+    public Completable insertMealToPlan(PlanMeal meal){
+        return localDataSource.insertMealToPlan(meal).subscribeOn(Schedulers.io());
     }
-    public void insertAllMealsToPlan(PlanMeal... meals){
-        localDataSource.insertAllMealsToPlan(meals);
+    public Completable insertAllMealsToPlan(PlanMeal... meals){
+        return localDataSource.insertAllMealsToPlan(meals).subscribeOn(Schedulers.io());
     }
     public Flowable<List<PlanMeal>> getAllPlanMeals(String userID){
         return localDataSource.getAllPlanMeals(userID).subscribeOn(Schedulers.io());
@@ -63,8 +67,8 @@ public class Repository {
     public Flowable<List<PlanMeal>> getPlanMealByDay(String day, String userID){
         return localDataSource.getPlanMealByDay(day, userID).subscribeOn(Schedulers.io());
     }
-    public void deleteMealFromPlan(PlanMeal meal){
-        localDataSource.deleteMealFromPlan(meal);
+    public Completable deleteMealFromPlan(PlanMeal meal){
+        return localDataSource.deleteMealFromPlan(meal).subscribeOn(Schedulers.io());
     }
 
     public Single<ApiMealsList> getMealOfTheDay(){
@@ -90,5 +94,16 @@ public class Repository {
     }
     public Single<ApiFilteredMealsList> filterMealsByMainIngredient(String mainIngredient){
         return remoteDataSource.filterMealsByMainIngredientNetworkCall(mainIngredient).subscribeOn(Schedulers.io());
+    }
+    public Completable insertInspirationMeal(InspirationMeal meal){
+        return localDataSource.insertInspirationMeal(meal).subscribeOn(Schedulers.io());
+    }
+    public Flowable<List<InspirationMeal>> getInspirationMeal(){
+        return localDataSource.getInspirationMeal()
+                .switchIfEmpty(Flowable.just(Collections.emptyList()))
+                .subscribeOn(Schedulers.io());
+    }
+    public Completable deleteAllInspirationMeals(){
+        return localDataSource.deleteAllInspirationMeals().subscribeOn(Schedulers.io());
     }
 }

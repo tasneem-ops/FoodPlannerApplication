@@ -2,15 +2,16 @@ package com.example.foodplanner.model.dto;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
-
-@Entity(tableName = "plan_meals", primaryKeys = {"id", "userID", "date"})
-public class PlanMeal {
+@Entity(tableName = "inspiration_meal")
+public class InspirationMeal {
+    @PrimaryKey
     @NonNull
     public String id;
     @NonNull
-    public String userID;
+    public String date;
     public String name;
     public String category;
     public String originCountry;
@@ -19,11 +20,10 @@ public class PlanMeal {
     public String tags;
     public String videoUrl;
     public ArrayList<MealIngredient> ingredients;
-    @NonNull
-    public String date;
 
-    public PlanMeal(String id, String name, String category, String originCountry, String instructions, String imageUrl, String tags, String videoUrl, ArrayList<MealIngredient> ingredients, String date) {
+    public InspirationMeal(@NonNull String id, @NonNull String date, String name, String category, String originCountry, String instructions, String imageUrl, String tags, String videoUrl, ArrayList<MealIngredient> ingredients) {
         this.id = id;
+        this.date = date;
         this.name = name;
         this.category = category;
         this.originCountry = originCountry;
@@ -32,29 +32,36 @@ public class PlanMeal {
         this.tags = tags;
         this.videoUrl = videoUrl;
         this.ingredients = ingredients;
-        this.date = date;
     }
-
-    public PlanMeal(Meal meal , String dayOfWeek){
+    public InspirationMeal(Meal meal, String date){
         this.id = meal.getId();
-        this.userID = meal.getUserID();
+        this.date = date;
         this.name = meal.getName();
         this.category = meal.getCategory();
         this.originCountry = meal.getOriginCountry();
         this.instructions = meal.getInstructions();
-        this.imageUrl = meal.imageUrl;
+        this.imageUrl = meal.getImageUrl();
         this.tags = meal.getTags();
         this.videoUrl = meal.getVideoUrl();
         this.ingredients = meal.getIngredients();
-        this.date = dayOfWeek;
     }
 
+    @NonNull
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(@NonNull String id) {
         this.id = id;
+    }
+
+    @NonNull
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(@NonNull String date) {
+        this.date = date;
     }
 
     public String getName() {
@@ -101,7 +108,7 @@ public class PlanMeal {
         return tags;
     }
 
-    public void setTags(java.lang.String tags) {
+    public void setTags(String tags) {
         this.tags = tags;
     }
 
@@ -109,7 +116,7 @@ public class PlanMeal {
         return videoUrl;
     }
 
-    public void setVideoUrl(java.lang.String videoUrl) {
+    public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
     }
 

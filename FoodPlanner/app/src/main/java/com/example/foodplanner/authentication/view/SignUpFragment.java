@@ -177,7 +177,26 @@ public class SignUpFragment extends Fragment{
         }
     }
     private boolean validateInput(String name, String email, String password, String confirmPassword) {
-        if (email.equals("") || password.equals("")|| name.equals("") ||confirmPassword.equals("") || !(confirmPassword.equals(password))) {
+        if(email.equals("")){
+            inputEmail.setError("Please Enter Your Email");
+        }
+        if(password.equals("")){
+            inputPassword.setError("Please Enter Password");
+        }
+        if(confirmPassword.equals("")){
+            inputConfrimPassword.setError("Please Enter Password Confirmation");
+        }
+        if(name.equals("")){
+            inputName.setError("Please Enter Your Full Name");
+        }
+        if(password.length() < 6){
+            inputPassword.setError("Password Must be Longer than 6 characters");
+        }
+        if(!(confirmPassword.equals(password))){
+            inputConfrimPassword.setError("Password and Confirmation don't match");
+        }
+        if (email.equals("") || password.equals("")|| name.equals("") ||confirmPassword.equals("")
+                || !(confirmPassword.equals(password)) || (password.length() < 6)) {
             return false;
         }
         return true;

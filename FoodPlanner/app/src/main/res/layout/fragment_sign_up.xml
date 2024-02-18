@@ -44,12 +44,11 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
         android:text="@string/signup"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
 
     <Button
         android:id="@+id/signUpButton"
@@ -61,27 +60,27 @@
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout4" />
 
-<!--    <ImageView-->
-<!--        android:id="@+id/googleSignup"-->
-<!--        android:layout_width="56dp"-->
-<!--        android:layout_height="56dp"-->
-<!--        android:src="@drawable/google"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"-->
-<!--        app:layout_constraintStart_toStartOf="@id/guidelineStart"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/alreadyHavAccText" />-->
+    <!--    <ImageView-->
+    <!--        android:id="@+id/googleSignup"-->
+    <!--        android:layout_width="56dp"-->
+    <!--        android:layout_height="56dp"-->
+    <!--        android:src="@drawable/google"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"-->
+    <!--        app:layout_constraintStart_toStartOf="@id/guidelineStart"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/alreadyHavAccText" />-->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/googleSignup"
         style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
         android:text="@string/signup_google"
+        android:textColor="@color/black"
         app:cornerRadius="12dp"
         app:icon="@drawable/google"
         app:iconGravity="start"
         app:iconTint="@null"
-        android:backgroundTint="@color/white"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@id/guestButton"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@id/guidelineStart" />
@@ -92,13 +91,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/white"
         android:text="@string/continue_as_guest"
+        android:textColor="@color/black"
         app:cornerRadius="12dp"
         app:icon="@drawable/anonymous"
         app:iconGravity="start"
         app:iconTint="@null"
-        android:backgroundTint="@color/white"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@id/guidelineStart" />
@@ -159,4 +158,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_end="8dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

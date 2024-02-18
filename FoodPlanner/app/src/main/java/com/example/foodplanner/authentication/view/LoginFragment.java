@@ -180,6 +180,7 @@ public class LoginFragment extends Fragment{
     }
 
     private boolean validateInput(String email, String password) {
+        if(email.equals(""))
         if (email.equals("") || password.equals("")) {
             return false;
         }

@@ -10,15 +10,16 @@ import androidx.room.Query;
 import com.example.foodplanner.model.dto.Meal;
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 
 @Dao
 public interface FavoritesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertMeal(Meal meal);
+    Completable insertMeal(Meal meal);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAllMeals(Meal... meals);
+    Completable insertAllMeals(Meal... meals);
 
     @Query("SELECT * FROM favorite_meals WHERE userID= :userID")
     Flowable<List<Meal>> getAllFavorites(String userID);
@@ -27,7 +28,5 @@ public interface FavoritesDao {
     Flowable<Meal> getMealById(String id, String userID);
 
     @Delete
-    void deleteMeal(Meal meal);
-
-
+    Completable deleteMeal(Meal meal);
 }

@@ -91,7 +91,8 @@ public class DetailFragment extends Fragment implements IViewDetail{
                     return;
                 if(firebaseUser !=null){
                     currentMeal.setUserID(firebaseUser.getUid());
-                    presenter.addMealToFav(currentMeal);
+                    presenter.addMealToFav(currentMeal)
+                            .observeOn(AndroidSchedulers.mainThread()).subscribe();
                     iconFav.setImageResource(R.drawable.favorite_fill);
                 }
             }
@@ -116,7 +117,8 @@ public class DetailFragment extends Fragment implements IViewDetail{
                         calendar.setTimeInMillis((Long) selection);
                         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                         String selectedDate = dateFormat.format(calendar.getTime());
-                        presenter.addMealToPlan(currentMeal, selectedDate);
+                        presenter.addMealToPlan(currentMeal, selectedDate)
+                                .observeOn(AndroidSchedulers.mainThread()).subscribe();
                     }
                 });
                 datePicker.addOnNegativeButtonClickListener(new View.OnClickListener() {
