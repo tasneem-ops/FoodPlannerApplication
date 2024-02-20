@@ -1,13 +1,11 @@
 package com.example.foodplanner.model.database;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.foodplanner.model.dto.Meal;
 import com.example.foodplanner.model.dto.PlanMeal;
 
 import java.util.List;

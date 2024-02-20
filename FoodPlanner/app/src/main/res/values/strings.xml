@@ -46,7 +46,7 @@
     <string name="next">Next</string>
     <string name="skip">Skip</string>
     <string name="start_journey">Let\'s Start</string>
-    <string name="signup_google">SignUp with Google</string>
+    <string name="signup_google">SignUp By Google</string>
     <string name="continue_as_guest">Continue as Guest</string>
     <string name="login_google">Login with Google</string>
     <string name="not_logged_in">Content Not Available!\nLogin to view full content</string>
@@ -60,4 +60,6 @@
     <string name="select_date">Select date</string>
     <string name="data_sync_success">Data Synced Successfully</string>
     <string name="data_sync_error">Error Updating Data</string>
+    <string name="random_date">Later in this week</string>
+    <string name="no_network">Network Error</string>
 </resources>

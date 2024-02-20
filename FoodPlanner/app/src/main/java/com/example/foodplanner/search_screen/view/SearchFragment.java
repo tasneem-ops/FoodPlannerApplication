@@ -8,18 +8,13 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.Fade;
-import androidx.transition.Scene;
-import androidx.transition.TransitionManager;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +36,7 @@ import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 public class SearchFragment extends Fragment implements IViewSearch, OnSearchClickListener {
 
@@ -55,6 +51,7 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
     int type = 0;
     Chip categoryChip, areaChip, ingredientChip;
     ChipGroup chipGroup;
+    Disposable categoryDisposable, areaDisposable, ingredientDisposable, mealDisposable, searchDisposable;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,15 +77,15 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
             getMeals(name);
         }
         else{
-            presenter.getCategoryList().observeOn(AndroidSchedulers.mainThread())
+            categoryDisposable = presenter.getCategoryList().observeOn(AndroidSchedulers.mainThread())
                     .subscribe(categoryList1 -> {
                         setCategoryList(categoryList1);
                     }, error-> showError(error.getMessage()));
-            presenter.getCountryList().observeOn(AndroidSchedulers.mainThread())
+            areaDisposable = presenter.getCountryList().observeOn(AndroidSchedulers.mainThread())
                     .subscribe(areaList1 -> {
                         setCountryList(areaList1);
                     }, error-> showError(error.getMessage()));
-            presenter.getIngredientList().observeOn(AndroidSchedulers.mainThread())
+            ingredientDisposable = presenter.getIngredientList().observeOn(AndroidSchedulers.mainThread())
                     .subscribe(ingredientList1->{
                         setIngredientList(ingredientList1);
                     }, error-> showError(error.getMessage()));
@@ -153,14 +150,14 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
         if(list !=null && ! (list.equals(Collections.emptyList()))){
             searchResultGridAdapter.setList(list);
             searchResultGridAdapter.notifyDataSetChanged();
-            Observable<SearchItem> studentsObservable = Observable.fromIterable(list);
+            Observable<SearchItem> listObservable = Observable.fromIterable(list);
             textInputEditText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     List<SearchItem> filteredItems = new ArrayList<>();
-                    studentsObservable.filter(searchItem -> (searchItem.getName().toLowerCase()).contains(charSequence.toString().toLowerCase()))
+                    searchDisposable = listObservable.filter(searchItem -> (searchItem.getName().toLowerCase()).contains(charSequence.toString().toLowerCase()))
                             .subscribe(searchItem -> filteredItems.add(searchItem),
                                     error ->{},
                                     ()->{updateRecyclerView(filteredItems);});
@@ -203,12 +200,11 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
     @Override
     public void setIngredientList(List<SearchItem> list) {
         ingredientList = list;
-        Log.i("TAG", "setIngredientList: " + list);
     }
 
     @Override
     public void showError(String errorMessage) {
-        Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.no_network, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -222,13 +218,34 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
         }
     }
     private void getMeals(String name){
-        presenter.getMealsList(name, type).observeOn(AndroidSchedulers.mainThread())
+        mealDisposable = presenter.getMealsList(name, type).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(meals ->{
                     setMealList(meals);
                 }, error -> showError(error.getMessage()));
-        textInputEditText.setHint(R.string.search_by_meal_name);
+        textInputLayout.setHint(R.string.search_by_meal_name);
+        textInputEditText.setText("");
         chipGroup.setVisibility(View.GONE);
         filterByText.setText(String.format(getResources().getString(R.string.your_viewing_search), name));
         type = Types.MEAL;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(categoryDisposable !=null && !categoryDisposable.isDisposed()){
+            categoryDisposable.dispose();
+        }
+        if(areaDisposable !=null && !areaDisposable.isDisposed()){
+            areaDisposable.dispose();
+        }
+        if(ingredientDisposable !=null && !ingredientDisposable.isDisposed()){
+            ingredientDisposable.dispose();
+        }
+        if(mealDisposable !=null && !mealDisposable.isDisposed()){
+            mealDisposable.dispose();
+        }
+        if(searchDisposable !=null && !searchDisposable.isDisposed()){
+            searchDisposable.dispose();
+        }
     }
 }

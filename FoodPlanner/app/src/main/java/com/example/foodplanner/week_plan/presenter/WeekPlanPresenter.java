@@ -1,17 +1,12 @@
 package com.example.foodplanner.week_plan.presenter;
 
-import androidx.lifecycle.LiveData;
-
-import com.example.foodplanner.model.dto.PlanMeal;
 import com.example.foodplanner.model.repository.Repository;
 import com.example.foodplanner.week_plan.view.IViewWeekPlan;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 public class WeekPlanPresenter implements IWeekPlanPresenter {
     IViewWeekPlan view;

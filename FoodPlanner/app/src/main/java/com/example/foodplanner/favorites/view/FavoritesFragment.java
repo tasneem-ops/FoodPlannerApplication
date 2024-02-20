@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 public class FavoritesFragment extends Fragment implements IViewFav,OnFavClickListener{
     RecyclerView favoritesRecyclerView;
@@ -46,6 +47,7 @@ public class FavoritesFragment extends Fragment implements IViewFav,OnFavClickLi
     Group group;
     Context context;
     IFavPresenter presenter;
+    Disposable favDisposable;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +69,7 @@ public class FavoritesFragment extends Fragment implements IViewFav,OnFavClickLi
             showNotLoggedIn();
         }
         else{
-            presenter.getFavMeals().observeOn(AndroidSchedulers.mainThread())
+            favDisposable = presenter.getFavMeals().observeOn(AndroidSchedulers.mainThread())
                     .subscribe(mealList -> {
                         favListAdapter.setList(mealList);
                         favListAdapter.notifyDataSetChanged();
@@ -119,5 +121,13 @@ public class FavoritesFragment extends Fragment implements IViewFav,OnFavClickLi
                 favListAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(favDisposable != null && !favDisposable.isDisposed()){
+            favDisposable.dispose();
+        }
     }
 }

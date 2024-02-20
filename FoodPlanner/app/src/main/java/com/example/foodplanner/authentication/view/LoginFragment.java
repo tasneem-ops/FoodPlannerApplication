@@ -111,7 +111,7 @@ public class LoginFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 authSharedPreferences = context.getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);
-                authSharedPreferences.edit().putBoolean(AuthConstants.IS_LOGGED_IN, false);
+                authSharedPreferences.edit().putBoolean(AuthConstants.IS_LOGGED_IN, false).apply();
                 Intent intent = new Intent(context, MainActivity.class);
                 startActivity(intent);
                 getActivity().finish();
@@ -159,16 +159,11 @@ public class LoginFragment extends Fragment{
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d("TAG", "signInWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 saveEmailCredentials(email, password);
                                 onLoginSuccess();
-                                Log.i("TAG", "onComplete: " + user.getIdToken(false));
 
                             } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w("TAG", "signInWithEmail:failure", task.getException());
                                 onLoginFailed();
                             }
                         }
@@ -195,10 +190,9 @@ public class LoginFragment extends Fragment{
     }
 
     public void onInputNotValid() {
-        Toast.makeText(context, "Input Not Valid", Toast.LENGTH_SHORT).show();
     }
     public void onLoginFailed() {
-        Toast.makeText(context, "Login Failed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Authentication Failed", Toast.LENGTH_SHORT).show();
     }
     private void saveGoogleCredentials(AuthCredential credential){
         authSharedPreferences = context.getSharedPreferences(AuthConstants.AUTHENTICATION, Context.MODE_PRIVATE);

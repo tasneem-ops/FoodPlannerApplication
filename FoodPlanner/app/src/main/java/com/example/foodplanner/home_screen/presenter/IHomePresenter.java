@@ -1,6 +1,5 @@
 package com.example.foodplanner.home_screen.presenter;
 
-import com.example.foodplanner.model.dto.ApiMeal;
 import com.example.foodplanner.model.dto.Area;
 import com.example.foodplanner.model.dto.Category;
 import com.example.foodplanner.model.dto.Meal;

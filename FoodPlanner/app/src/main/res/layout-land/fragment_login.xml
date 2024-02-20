@@ -11,7 +11,7 @@
         android:id="@+id/textInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
         app:layout_constraintTop_toBottomOf="@+id/textView3">
@@ -28,7 +28,7 @@
         android:id="@+id/textInputLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
@@ -45,75 +45,78 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="16dp"
         android:text="@string/login"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!--    <ImageView-->
+    <!--        android:id="@+id/googleLogin"-->
+    <!--        android:layout_width="56dp"-->
+    <!--        android:layout_height="56dp"-->
+    <!--        android:background="#FFFFFF"-->
+    <!--        android:src="@drawable/google"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"-->
+    <!--        app:layout_constraintStart_toStartOf="@id/guidelineStart"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/newUserText" />-->
     <Button
         android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="216dp"
+        android:layout_marginTop="8dp"
         android:text="@string/login"
-        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
-<!--    <ImageView-->
-<!--        android:id="@+id/googleLogin"-->
-<!--        android:layout_width="56dp"-->
-<!--        android:layout_height="56dp"-->
-<!--        android:background="#FFFFFF"-->
-<!--        android:src="@drawable/google"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"-->
-<!--        app:layout_constraintStart_toStartOf="@id/guidelineStart"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/newUserText" />-->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/googleLogin"
         style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
         android:text="@string/login_google"
+        android:textColor="@color/black"
         app:cornerRadius="12dp"
         app:icon="@drawable/google"
         app:iconGravity="start"
         app:iconTint="@null"
-        android:backgroundTint="@color/white"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/guestLogin"
+        app:layout_constraintBottom_toBottomOf="@+id/guestLogin"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@id/guidelineStart" />
+        app:layout_constraintStart_toEndOf="@+id/guestLogin"
+        app:layout_constraintTop_toTopOf="@+id/guestLogin" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/guestLogin"
         style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/white"
         android:text="@string/continue_as_guest"
+        android:textColor="@color/black"
         app:cornerRadius="12dp"
         app:icon="@drawable/anonymous"
         app:iconGravity="start"
         app:iconTint="@null"
-        android:backgroundTint="@color/white"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintHorizontal_bias="0.111"
         app:layout_constraintStart_toStartOf="@id/guidelineStart" />
 
     <TextView
         android:id="@+id/newUserText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="204dp"
         android:text="@string/new_user"
-        app:layout_constraintEnd_toEndOf="@+id/loginButton"
-        app:layout_constraintStart_toStartOf="@+id/loginButton"
-        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
+        app:layout_constraintBottom_toBottomOf="@+id/loginButton"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintTop_toTopOf="@+id/loginButton"
+        app:layout_constraintVertical_bias="0.391" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineStart"

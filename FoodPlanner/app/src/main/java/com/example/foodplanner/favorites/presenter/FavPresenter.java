@@ -23,7 +23,6 @@ public class FavPresenter implements IFavPresenter{
     public Flowable<List<Meal>> getFavMeals() {
         Flowable<List<Meal>> meals =  repository.getAllFavorite(FirebaseAuth.getInstance().getCurrentUser().getUid());
         return meals;
-//        view.setFavList(meals);
     }
 
     @Override
