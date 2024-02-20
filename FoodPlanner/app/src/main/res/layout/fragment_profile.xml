@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".profile.view.ProfileFragment"
+    android:background="@color/background">
+
+    <TextView
+        android:id="@+id/profileNameTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="@+id/profileImagText"
+        app:layout_constraintStart_toStartOf="@+id/profileImagText"
+        app:layout_constraintTop_toBottomOf="@+id/profileImagText"
+        tools:text="Name" />
+
+    <TextView
+        android:id="@+id/profileEmailTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="@+id/profileImagText"
+        app:layout_constraintStart_toStartOf="@+id/profileImagText"
+        app:layout_constraintTop_toBottomOf="@+id/profileNameTxt"
+        tools:text="Email" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <Button
+        android:id="@+id/syncButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/sync_data"
+        app:layout_constraintEnd_toEndOf="@+id/profileImagText"
+        app:layout_constraintStart_toStartOf="@+id/profileImagText"
+        app:layout_constraintTop_toBottomOf="@+id/profileEmailTxt" />
+
+    <TextView
+        android:id="@+id/profileImagText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circular_shape"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toTopOf="@+id/guidelineTop"
+        tools:text="T" />
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/logout"
+        app:layout_constraintEnd_toEndOf="@+id/profileImagText"
+        app:layout_constraintStart_toStartOf="@+id/profileImagText"
+        app:layout_constraintTop_toBottomOf="@+id/syncButton" />
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="profileImagText, profileEmailTxt, profileNameTxt, syncButton, logoutButton"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="48dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/not_loggedin_profile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/hacker"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/not_logged_in"
+            app:layout_constraintTop_toBottomOf="@id/img"
+            app:layout_constraintStart_toStartOf="@id/img"
+            app:layout_constraintEnd_toEndOf="@id/img"/>
+
+        <Button
+            android:id="@+id/login_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login"
+            app:layout_constraintTop_toBottomOf="@id/txt"
+            app:layout_constraintStart_toStartOf="@id/img"
+            app:layout_constraintEnd_toEndOf="@id/img"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

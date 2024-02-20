@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".authentication.view.SignUpFragment"
+    android:background="@color/background">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
+        app:layout_constraintWidth_percent="0.4">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputEmailSignup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintTop_toTopOf="@+id/textInputLayout3"
+        app:layout_constraintWidth_percent="0.4">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputPasswordSignup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:inputType="textPassword" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/signup"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/googleSignup"-->
+    <!--        android:layout_width="56dp"-->
+    <!--        android:layout_height="56dp"-->
+    <!--        android:src="@drawable/google"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"-->
+    <!--        app:layout_constraintStart_toStartOf="@id/guidelineStart"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/alreadyHavAccText" />-->
+
+    <Button
+        android:id="@+id/signUpButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/signup"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/googleSignup"
+        style="@style/Widget.MaterialComponents.Button.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_marginEnd="48dp"
+        android:backgroundTint="@color/white"
+        android:text="@string/signup_google"
+        android:textColor="@color/black"
+        app:cornerRadius="12dp"
+        app:icon="@drawable/google"
+        app:iconGravity="start"
+        app:iconTint="@null"
+        app:layout_constraintBottom_toBottomOf="@+id/guestButton"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintTop_toTopOf="@+id/guestButton" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/guestButton"
+        style="@style/Widget.MaterialComponents.Button.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/white"
+        android:text="@string/continue_as_guest"
+        android:textColor="@color/black"
+        app:cornerRadius="12dp"
+        app:icon="@drawable/anonymous"
+        app:iconGravity="start"
+        app:iconTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/googleSignup" />
+
+    <TextView
+        android:id="@+id/alreadyHavAccText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/already_hav_acc"
+        app:layout_constraintStart_toEndOf="@+id/signUpButton"
+        app:layout_constraintTop_toTopOf="@+id/signUpButton" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@id/textView3"
+        app:layout_constraintWidth_percent="0.4">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputNameSignup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/full_name" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
+        app:layout_constraintWidth_percent="0.4">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="8dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="8dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="12dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>
