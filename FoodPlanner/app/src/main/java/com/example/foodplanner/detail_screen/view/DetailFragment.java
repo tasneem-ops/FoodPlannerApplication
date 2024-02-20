@@ -17,9 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +32,8 @@ import com.example.foodplanner.model.dto.Meal;
 import com.example.foodplanner.model.dto.MealIngredient;
 import com.example.foodplanner.model.network.APIRemoteDataSource;
 import com.example.foodplanner.model.repository.Repository;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.snackbar.Snackbar;
@@ -111,8 +111,10 @@ public class DetailFragment extends Fragment implements IViewDetail{
                 MaterialDatePicker datePicker = MaterialDatePicker.Builder.datePicker()
                         .setTitleText(R.string.select_date)
                         .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                        .setCalendarConstraints(limitRange(MaterialDatePicker.todayInUtcMilliseconds()))
                         .build();
                 datePicker.show(getChildFragmentManager(), "tag");
+
                 datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
                     @Override
                     public void onPositiveButtonClick(Object selection) {
@@ -196,7 +198,7 @@ public class DetailFragment extends Fragment implements IViewDetail{
 
     @Override
     public void showError(String errMessage) {
-        Toast.makeText(context, errMessage , Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.no_network , Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -224,6 +226,11 @@ public class DetailFragment extends Fragment implements IViewDetail{
             return false;
         }
         return networkInfo.isConnected();
+    }
+    private CalendarConstraints limitRange(long today) {
+        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder();
+        constraintsBuilder.setValidator(DateValidatorPointForward.from(today));
+        return constraintsBuilder.build();
     }
 
     @Override

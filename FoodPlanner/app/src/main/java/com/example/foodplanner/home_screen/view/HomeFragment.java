@@ -39,7 +39,6 @@ import java.util.List;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment implements IViewHome, OnItemClickListener{
     ImageView imageMealOfTheDay;
@@ -60,7 +59,6 @@ public class HomeFragment extends Fragment implements IViewHome, OnItemClickList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -162,7 +160,7 @@ public class HomeFragment extends Fragment implements IViewHome, OnItemClickList
 
     @Override
     public void showError(String errMessage) {
-        Toast.makeText(context, errMessage, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context,R.string.no_network, Toast.LENGTH_SHORT).show();
     }
 
     @Override

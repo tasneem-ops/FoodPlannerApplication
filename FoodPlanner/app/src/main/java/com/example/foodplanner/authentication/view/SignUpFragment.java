@@ -11,12 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -138,7 +136,7 @@ public class SignUpFragment extends Fragment{
                                     saveGoogleCredentials(credential);
                                     onSignupSuccess();
                                 } else {
-                                    Toast.makeText(context, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                                    onSignupFailed();
                                 }
                             }
                         });
@@ -156,8 +154,6 @@ public class SignUpFragment extends Fragment{
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("TAG", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                     .setDisplayName(name).build();
@@ -166,14 +162,10 @@ public class SignUpFragment extends Fragment{
                             saveEmailCredentials(email, password);
                             onSignupSuccess();
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(context, "Authentication Failed", Toast.LENGTH_SHORT).show();
+                            onSignupFailed();
                         }
                     }
                 });
-        }
-        else{
-            onInputNotValid();
         }
     }
     private boolean validateInput(String name, String email, String password, String confirmPassword) {
@@ -224,10 +216,6 @@ public class SignUpFragment extends Fragment{
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
         requireActivity().finish();
-    }
-
-    public void onInputNotValid() {
-        Toast.makeText(context, "Input Not Valid", Toast.LENGTH_SHORT).show();
     }
     public void onSignupFailed() {
         Toast.makeText(context, "Authentication Failed", Toast.LENGTH_SHORT).show();

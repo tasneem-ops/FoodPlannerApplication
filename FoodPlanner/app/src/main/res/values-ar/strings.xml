@@ -60,4 +60,6 @@
     <string name="select_date">اختر تاريخا</string>
     <string name="data_sync_success">تم حفظ البيانات بنجاح</string>
     <string name="data_sync_error">مشكلة في حفظ البيانات</string>
+    <string name="random_date">لاحقا في هذا الأسبوع</string>
+    <string name="no_network">مشكلة في الاتصال بالانترنت</string>
 </resources>

@@ -8,18 +8,13 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.Fade;
-import androidx.transition.Scene;
-import androidx.transition.TransitionManager;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -205,12 +200,11 @@ public class SearchFragment extends Fragment implements IViewSearch, OnSearchCli
     @Override
     public void setIngredientList(List<SearchItem> list) {
         ingredientList = list;
-        Log.i("TAG", "setIngredientList: " + list);
     }
 
     @Override
     public void showError(String errorMessage) {
-        Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.no_network, Toast.LENGTH_SHORT).show();
     }
 
     @Override

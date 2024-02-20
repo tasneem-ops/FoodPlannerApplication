@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".search_screen.view.SearchFragment" >
+    tools:context=".search_screen.view.SearchFragment"
+    android:background="@color/background">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search_bar"
@@ -54,7 +55,8 @@
             android:text="@string/category"
             android:textSize="14sp"
             app:checkedIcon="@drawable/checked"
-            app:checkedIconVisible="true" />
+            app:checkedIconVisible="true"
+            android:fontFamily="@font/aladin"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/areaChip"
@@ -64,7 +66,8 @@
             android:text="@string/country"
             android:textSize="14sp"
             app:checkedIcon="@drawable/checked"
-            app:checkedIconVisible="true" />
+            app:checkedIconVisible="true"
+            android:fontFamily="@font/aladin"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/ingredientChip"
@@ -74,7 +77,8 @@
             android:text="@string/ingredient"
             android:textSize="14sp"
             app:checkedIcon="@drawable/checked"
-            app:checkedIconVisible="true" />
+            app:checkedIconVisible="true"
+            android:fontFamily="@font/aladin"/>
     </com.google.android.material.chip.ChipGroup>
 
     <androidx.recyclerview.widget.RecyclerView

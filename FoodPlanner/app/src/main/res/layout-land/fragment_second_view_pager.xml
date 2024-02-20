@@ -13,7 +13,7 @@
         android:layout_width="300dp"
         android:layout_height="400dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/vieepager2"
+        android:src="@drawable/viewpager2"
         app:layout_constraintHeight_percent="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -46,22 +46,6 @@ public class Meal {
         setOriginCountry(meal.getArea());
         setInstructions(meal.getInstructions());
         ArrayList<MealIngredient> ingredientsList = new ArrayList<>();
-//        try {
-//            Class<?> reflectionClass = getClass();
-//            for (int i = 1; i <= 20; i++) {
-//                Field ingredientField = reflectionClass.getDeclaredField("strIngredient" + i);
-//                Field measureField = reflectionClass.getDeclaredField("strMeasure" + i);
-//                ingredientField.setAccessible(true);
-//                measureField.setAccessible(true);
-//                String ingredient = (String) ingredientField.get(this);
-//                String measure = (String) measureField.get(this);
-//                if (ingredient != null && !ingredient.isEmpty()) {
-//                    ingredientsList.add(new MealIngredient(ingredient, measure));
-//                }
-//            }
-//        } catch (NoSuchFieldException | IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
         addIngredientToList(meal.getStrIngredient1(), meal.getStrMeasure1(), ingredientsList);
         addIngredientToList(meal.getStrIngredient2(), meal.getStrMeasure2(), ingredientsList);
         addIngredientToList(meal.getStrIngredient3(), meal.getStrMeasure3(), ingredientsList);

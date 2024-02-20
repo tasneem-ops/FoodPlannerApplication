@@ -7,6 +7,7 @@ import com.example.foodplanner.model.dto.Meal;
 import com.example.foodplanner.model.dto.PlanMeal;
 import com.example.foodplanner.model.repository.Repository;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -30,10 +31,13 @@ public class DetailPresenter implements IDetailPresenter{
             view.setMeal(repository.getMealById(id).map(apiMealsList -> new Meal(apiMealsList.getMeals().get(0))));
         }
         else{
-            view.setMeal(repository.getFavMealById(id, FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .firstOrError());
-            view.setMeal(repository.getPlanMealById(id, FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .map(planMeal -> new Meal(planMeal)).firstOrError());
+            FirebaseUser user  = FirebaseAuth.getInstance().getCurrentUser();
+            if(user != null){
+                view.setMeal(repository.getFavMealById(id, user.getUid())
+                        .firstOrError());
+                view.setMeal(repository.getPlanMealById(id, user.getUid())
+                        .map(planMeal -> new Meal(planMeal)).firstOrError());
+            }
         }
     }
 
@@ -64,11 +68,13 @@ public class DetailPresenter implements IDetailPresenter{
 
     @Override
     public void isFav(String id) {
-        y = repository.getFavMealById(id, FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(item->{
-                    view.setFav();
-                });
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+            y = repository.getFavMealById(id, FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(item->{
+                        view.setFav();
+                    });
+        }
     }
 
 }

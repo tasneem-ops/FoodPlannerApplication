@@ -12,6 +12,7 @@
         <item name="colorSecondaryVariant">#B0BEA9</item>
         <item name="colorPrimaryContainer">#F1F7EE</item>
         <item name="colorOnPrimaryContainer">#E0EDC5</item>
+        <item name="colorAccent">#F1F7EE</item>
     </style>
 
     <style name="Theme.FoodPlanner" parent="Base.Theme.FoodPlanner" />

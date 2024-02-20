@@ -1,6 +1,5 @@
 package com.example.foodplanner.splash_screen.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,20 +16,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.foodplanner.R;
-import com.example.foodplanner.authentication.view.AuthenticationActivity;
-import com.example.foodplanner.home_screen.view.MainActivity;
 
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Observable;
-
+import io.reactivex.rxjava3.disposables.Disposable;
 
 public class SplashFragment extends Fragment {
     Animation animationLogo, animationSlogan;
     ImageView logoImage;
     TextView textSlogan;
+    Disposable timer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,7 +37,6 @@ public class SplashFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_splash, container, false);
     }
 
@@ -61,7 +57,7 @@ public class SplashFragment extends Fragment {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                Completable.timer(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread())
+                timer = Completable.timer(1000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread())
                         .subscribe(()-> {
                                     Navigation.findNavController(view).navigate(R.id.action_splashFragment_to_viewPagerFragment);
                                 });
@@ -74,4 +70,11 @@ public class SplashFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(timer != null && !timer.isDisposed()){
+            timer.dispose();
+        }
+    }
 }

@@ -60,4 +60,6 @@
     <string name="select_date">Select date</string>
     <string name="data_sync_success">Data Synced Successfully</string>
     <string name="data_sync_error">Error Updating Data</string>
+    <string name="random_date">Later in this week</string>
+    <string name="no_network">Network Error</string>
 </resources>

@@ -32,6 +32,8 @@ import com.example.foodplanner.model.network.APIRemoteDataSource;
 import com.example.foodplanner.model.repository.Repository;
 import com.example.foodplanner.week_plan.presenter.IWeekPlanPresenter;
 import com.example.foodplanner.week_plan.presenter.WeekPlanPresenter;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.snackbar.Snackbar;
@@ -46,6 +48,7 @@ import java.util.TimeZone;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class WeekPlanFragment extends Fragment implements IViewWeekPlan, OnPlanMealClickListener{
@@ -59,6 +62,7 @@ public class WeekPlanFragment extends Fragment implements IViewWeekPlan, OnPlanM
     Context context;
     IWeekPlanPresenter presenter;
     String selectedDate = "";
+    Disposable todayDisposable, tomorrowDisposable, anyDateDisposable;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,7 +150,7 @@ public class WeekPlanFragment extends Fragment implements IViewWeekPlan, OnPlanM
 
     @Override
     public void setTodayList(Flowable<List<PlanMeal>> meals) {
-        meals.observeOn(AndroidSchedulers.mainThread())
+        todayDisposable = meals.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> {
                     todayAdapter.setList(list);
                     todayAdapter.notifyDataSetChanged();
@@ -155,7 +159,7 @@ public class WeekPlanFragment extends Fragment implements IViewWeekPlan, OnPlanM
 
     @Override
     public void setTomorrowList(Flowable<List<PlanMeal>> meals) {
-        meals.observeOn(AndroidSchedulers.mainThread())
+        tomorrowDisposable = meals.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> {
                     tomorrowAdapter.setList(list);
                     tomorrowAdapter.notifyDataSetChanged();
@@ -165,7 +169,7 @@ public class WeekPlanFragment extends Fragment implements IViewWeekPlan, OnPlanM
     @Override
     public void setAnyDayList(Flowable<List<PlanMeal>> meals, String date) {
         if(date.equals(selectedDate)){
-            meals.observeOn(AndroidSchedulers.mainThread())
+            anyDateDisposable = meals.observeOn(AndroidSchedulers.mainThread())
                     .subscribe(list -> {
                         anyDayAdapter.setList(list);
                         anyDayAdapter.notifyDataSetChanged();
@@ -176,6 +180,7 @@ public class WeekPlanFragment extends Fragment implements IViewWeekPlan, OnPlanM
         MaterialDatePicker datePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select date")
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .setCalendarConstraints(limitRange(MaterialDatePicker.todayInUtcMilliseconds()))
                 .build();
         datePicker.show(getChildFragmentManager(), "tag");
         datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
@@ -185,7 +190,6 @@ public class WeekPlanFragment extends Fragment implements IViewWeekPlan, OnPlanM
                 calendar.setTimeInMillis((Long) selection);
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                 selectedDate = dateFormat.format(calendar.getTime());
-                Toast.makeText(getContext(), "Selected Date: "+ selectedDate, Toast.LENGTH_SHORT).show();
                 presenter.getAnyDayList(selectedDate);
             }
         });
@@ -201,5 +205,24 @@ public class WeekPlanFragment extends Fragment implements IViewWeekPlan, OnPlanM
                 Snackbar.make(picDate, "Please select a date to show the plan", Snackbar.LENGTH_SHORT).show();
             }
         });
+    }
+    private CalendarConstraints limitRange(long today) {
+        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder();
+        constraintsBuilder.setValidator(DateValidatorPointForward.from(today));
+        return constraintsBuilder.build();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(todayDisposable !=null && !todayDisposable.isDisposed()){
+            todayDisposable.dispose();
+        }
+        if(tomorrowDisposable !=null && !tomorrowDisposable.isDisposed()){
+            tomorrowDisposable.dispose();
+        }
+        if(anyDateDisposable !=null && !anyDateDisposable.isDisposed()){
+            anyDateDisposable.dispose();
+        }
     }
 }
